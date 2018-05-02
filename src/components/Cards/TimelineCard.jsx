@@ -56,9 +56,11 @@ class TimelineCard extends React.Component {
     }
     let faces
     if (image2 !== undefined) {
+      console.log(image2);
+      
       faces = (
         <Button color='defaultNoBackground' customClass={classes.link}>
-          <img src={image2} alt='...' className={classes.cardImage} />
+          <img src={image2} alt='missing image 2' className={classes.cardImage} />
         </Button>
       )
     }
@@ -70,7 +72,7 @@ class TimelineCard extends React.Component {
           subheader={
             <div>
               <Button color='defaultNoBackground' customClass={classes.link}>
-                <img src={image} alt='...' className={classes.cardImage} />
+                <img src={image} alt='missing image' className={classes.cardImage} />
               </Button>
               {faces}
             </div>

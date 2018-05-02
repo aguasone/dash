@@ -46,6 +46,7 @@ class TimelinePage extends React.Component {
 
   // Setting up websocket client connection
   componentWillMount() {
+    console.log(this.props);
     this.props.fetchCustomers()
     this.socket.on('reload', () => this._socketReload())
     this.socket.on('update', (id) => this._socketUpdate(id))
@@ -56,9 +57,6 @@ class TimelinePage extends React.Component {
     this.socket.close()
   }
 
-  activeRoute(routeName) {
-    return this.props.location.pathname.indexOf(routeName) > -1 ? true : false
-  }
   _onToggle() {
     let elementProps = { ...this.state.elementProps }
     let elementProps2 = { ...this.state.elementProps2 }
@@ -126,6 +124,7 @@ class TimelinePage extends React.Component {
         //let itemDate = moment(item.date, 'YYYYMMDDHHmmSS').format('DD-MM-YYYY HH:mm:ss')
         
         let photo = 'https://gitlab.exception34.com/photo/'
+
         let faceDetected = photo + item.image_processed
         let faceKnown
         let inverted = index % 2 ? true : false
@@ -137,7 +136,7 @@ class TimelinePage extends React.Component {
         }
 
         if (recognized) {
-          faceKnown = photo + item.known
+           faceKnown = photo + item.known
         }
         if (!item.customer) item.customer = {}
 

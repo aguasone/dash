@@ -92,7 +92,7 @@ class Dashboard extends React.Component {
           handleDrawerToggle={this.handleDrawerToggle}
           open={this.state.mobileOpen}
           color="purple"
-          bgColor="white"
+          bgColor="black"
           miniActive={this.state.miniActive}
           {...rest}
         />

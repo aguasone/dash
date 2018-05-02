@@ -29,11 +29,10 @@ const imagePriceCardStyle = {
     transform: "translate3d(0, 0, 0)",
     height: "60%",
     overflow: "hidden",
-    marginLeft: "15px",
-    marginRight: "15px",
+    marginLeft: "1px",
+    marginRight: "1px",
     marginTop: "-30px",
     borderRadius: "6px",
-    ...boxShadow
   },
   underImage: {
     position: "absolute",
@@ -125,7 +124,6 @@ const imagePriceCardStyle = {
   },
   link: {
     margin: "0 !important",
-    padding: "0 !important",
     width: '100%'
   }
 };
