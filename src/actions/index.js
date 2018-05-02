@@ -23,7 +23,7 @@ import {
 } from './types.js';
 
 const io = require('socket.io-client')
-const socket = io('https://gitlab.exception34.com')
+const socket = io('https://gitlab.exception34.com', {secure: true})
 
 const ROOT_URL = 'https://gitlab.exception34.com/api';
 const ROOT_URL2 = 'https://gitlab.exception34.com/apis';

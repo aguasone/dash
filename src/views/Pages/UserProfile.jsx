@@ -25,7 +25,7 @@ const io = require('socket.io-client')
 class UserProfile extends React.Component {
   constructor () {
     super();
-    this.socket = io('https://gitlab.exception34.com')
+    this.socket = io('https://gitlab.exception34.com', {secure: true})
   }
 
   componentWillMount() {
