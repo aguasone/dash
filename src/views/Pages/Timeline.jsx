@@ -125,7 +125,7 @@ class TimelinePage extends React.Component {
         let since = moment(item.date, 'YYYYMMDDHHmmSS').fromNow()
         //let itemDate = moment(item.date, 'YYYYMMDDHHmmSS').format('DD-MM-YYYY HH:mm:ss')
         
-        let photo = 'https://ui.exception34.com/photo/'
+        let photo = 'https://gitlab.exception34.com/photo/'
         let faceDetected = photo + item.image_processed
         let faceKnown
         let inverted = index % 2 ? true : false

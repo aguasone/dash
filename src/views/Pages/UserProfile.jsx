@@ -49,7 +49,7 @@ class UserProfile extends React.Component {
 
         let date = new Date(item.date.toString().replace(/^(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)$/, '$4:$5:$6 $2/$3/$1'))
         let itemDate = moment(date).format('DD-MM-YYYY HH:MM:ss')
-        let photo = 'https://ui.exception34.com/photo/'
+        let photo = 'https://gitlab.exception34.com/photo/'
         let faceDetected = photo + item.image_processed
         let avatar = photo + item.image_processed
         let faceKnown
