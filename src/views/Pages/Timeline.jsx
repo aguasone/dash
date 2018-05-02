@@ -32,7 +32,7 @@ const io = require('socket.io-client')
 class TimelinePage extends React.Component {
   constructor(props) {
     super(props)
-    this.socket = io('https://ui.exception34.com')
+    this.socket = io('https://gitlab.exception34.com')
     this._onToggle = this._onToggle.bind(this)
     this.hideAlert = this.hideAlert.bind(this)
     this.state = {
@@ -149,7 +149,7 @@ class TimelinePage extends React.Component {
             <TimelineCard
               image={faceDetected}
               image2={faceKnown}
-              title={item.customer.lastname}
+              title={item.customer.firstname + ' ' + item.customer.lastname}
               text={item.customer.email}
               price={since}
               statIcon={DateRange}
