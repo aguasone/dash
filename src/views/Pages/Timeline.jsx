@@ -14,7 +14,7 @@ import Tooltip from 'material-ui/Tooltip'
 
 // @material-ui/icons
 import Edit from '@material-ui/icons/Edit'
-import Place from '@material-ui/icons/Place'
+import DateRange from "@material-ui/icons/DateRange";
 import Extension from '@material-ui/icons/Extension'
 
 // core components
@@ -121,8 +121,10 @@ class TimelinePage extends React.Component {
 
     if (store.face.customers) {
       faces = store.face.customers.map((item, index) => {
-        let date = new Date(item.date.toString().replace(/^(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)$/, '$4:$5:$6 $2/$3/$1'))
-        let itemDate = moment(date).format('DD-MM-YYYY HH:MM:ss')
+      //  let date = new Date(item.date.toString().replace(/^(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)$/, '$4:$5:$6 $2/$3/$1'))
+        let since = moment(item.date, 'YYYYMMDDHHmmSS').fromNow()
+        //let itemDate = moment(item.date, 'YYYYMMDDHHmmSS').format('DD-MM-YYYY HH:mm:ss')
+        
         let photo = 'https://ui.exception34.com/photo/'
         let faceDetected = photo + item.image_processed
         let faceKnown
@@ -149,8 +151,8 @@ class TimelinePage extends React.Component {
               image2={faceKnown}
               title={item.customer.lastname}
               text={item.customer.email}
-              price={itemDate}
-              statIcon={Place}
+              price={since}
+              statIcon={DateRange}
               statText=''
               hover
               underImage={
