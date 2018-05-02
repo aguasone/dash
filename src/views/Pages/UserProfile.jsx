@@ -16,6 +16,8 @@ import PermIdentity from '@material-ui/icons/PermIdentity'
 import Edit from '@material-ui/icons/Edit'
 import DateRange from "@material-ui/icons/DateRange";
 import Extension from '@material-ui/icons/Extension'
+import AccessTime from "@material-ui/icons/AccessTime";
+import Fingerprint from "@material-ui/icons/Fingerprint";
 
 // core components
 import GridContainer from 'components/Grid/GridContainer.jsx'
@@ -32,10 +34,28 @@ import dashboardStyle from 'assets/jss/material-dashboard-pro-react/views/dashbo
 
 const io = require('socket.io-client')
 
+const colors = [
+  "primary",
+  "warning",
+  "danger",
+  "success",
+  "info",
+  "rose"
+]
+
 class UserProfile extends React.Component {
   constructor() {
     super();
+
+    this.state = {
+      requiredState: "",
+      typeEmail: "",
+      typeEmailState: "",
+
+    }
+
     this.socket = io('https://gitlab.exception34.com', { secure: true })
+    this.typeClick = this.typeClick.bind(this);
   }
 
   componentWillMount() {
@@ -54,6 +74,55 @@ class UserProfile extends React.Component {
     });
   }
 
+  typeClick() {
+    if (this.state.requiredState === "") {
+      this.setState({ requiredState: "error" });
+    }
+    if (this.state.typeEmailState === "") {
+      this.setState({ typeEmailState: "error" });
+    }
+    if (this.state.numberState === "") {
+      this.setState({ numberState: "error" });
+    }
+    if (this.state.urlState === "") {
+      this.setState({ urlState: "error" });
+    }
+    if (this.state.equalToState === "") {
+      this.setState({ equalToState: "error" });
+    }
+    console.log((this.state));
+
+  }
+  // function that returns true if value is email, false otherwise
+  verifyEmail(value) {
+    var emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (emailRex.test(value)) {
+      return true;
+    }
+    return false;
+  }
+
+  change(event, stateName, type, stateNameEqualTo, maxValue) {
+    switch (type) {
+      case "email":
+        if (this.verifyEmail(event.target.value)) {
+          this.setState({ [stateName + "State"]: "success" });
+        } else {
+          this.setState({ [stateName + "State"]: "error" });
+        }
+        break;
+      default:
+        break;
+    }
+    switch (type) {
+      case "checkbox":
+        this.setState({ [stateName]: event.target.checked });
+        break;
+      default:
+        this.setState({ [stateName]: event.target.value });
+        break;
+    }
+  }
   // _change(propertyName) {
   //   return (event) => {
   //     let size = {
@@ -92,6 +161,7 @@ class UserProfile extends React.Component {
     let avatar = photo + item.image_processed
     let faceKnown
     let fullName = item.customer.firstname + ' ' + item.customer.lastname
+console.log('jere');
 
     let recognized = false
     if (item.known_conf >= 1) {
@@ -102,11 +172,13 @@ class UserProfile extends React.Component {
       faceKnown = photo + item.known
     }
 
+
     if (store.face.customers) {
       faces = store.face.customers.map((item, index) => {
         //  let date = new Date(item.date.toString().replace(/^(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)$/, '$4:$5:$6 $2/$3/$1'))
         let since = moment(item.date, 'YYYYMMDDHHmmSS').fromNow()
         //let itemDate = moment(item.date, 'YYYYMMDDHHmmSS').format('DD-MM-YYYY HH:mm:ss')
+        var titleColor = colors[Math.floor(Math.random() * colors.length)];
 
         let photo = 'https://gitlab.exception34.com/photo/'
 
@@ -125,18 +197,17 @@ class UserProfile extends React.Component {
         if (!item.customer) item.customer = {}
 
         return {
-          badgeColor: 'success',
-          badgeIcon: Extension,
-          inverted: true,
+          badgeColor: titleColor,
+          badgeIcon: Fingerprint,
           body: (
             <TimelineCard
               image={faceDetected}
               image2={faceKnown}
               title={item.customer.firstname + ' ' + item.customer.lastname}
               text={item.customer.email}
-              price={since}
-              statIcon={DateRange}
-              statText=''
+              price=''
+              statIcon={AccessTime}
+              statText={since}
               hover
               underImage={
                 <div>
@@ -155,7 +226,8 @@ class UserProfile extends React.Component {
                 </div>
               }
             />
-          )
+          ),
+          //    footerTitle: "11 hours ago via Twitter"
         }
       }
       )
@@ -164,7 +236,13 @@ class UserProfile extends React.Component {
     return (
       <div>
         <GridContainer>
-          <ItemGrid xs={12} sm={8} md={9}>
+          <ItemGrid xs={12} sm={7} md={8}>
+            <ProfileCard
+              avatar={avatar}
+              subtitle={item.customer.age}
+              title={fullName}
+              description={item.customer.email}
+            />
             <IconCard
               icon={PermIdentity}
               iconColor='rose'
@@ -195,16 +273,19 @@ class UserProfile extends React.Component {
                       />
                     </ItemGrid>
                     <ItemGrid xs={12} sm={12} md={4}>
-                      <CustomInput
-                        labelText='Email address'
-                        id='email-address'
-                        inputProps={{
-                          value: `${item.customer.email}`
-                        }}
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                      />
+                    <CustomInput
+                      success={this.state.typeEmailState === "success"}
+                      error={this.state.typeEmailState === "error"}
+                      id="typeemail"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        onChange: event =>
+                          this.change(event, "typeEmail", "email"),
+                        type: "email"
+                      }}
+                    />
                     </ItemGrid>
                   </GridContainer>
                   <GridContainer>
@@ -280,7 +361,7 @@ class UserProfile extends React.Component {
                       />
                     </ItemGrid>
                   </GridContainer>
-                  <Button color='rose' right>
+                  <Button color='rose' right onClick={this.typeClick}>
                     Update Profile
                 </Button>
                   <Clearfix />
@@ -288,15 +369,9 @@ class UserProfile extends React.Component {
               }
             />
           </ItemGrid>
-          <ItemGrid xs={12} sm={4} md={3}>
-            <ProfileCard
-              avatar={avatar}
-              subtitle={item.customer.age}
-              title={fullName}
-              description={item.customer.email}
-            />
+          <ItemGrid xs={12} sm={5} md={4}>
             <h4 className={classes.title}>
-          Timeline
+              Timeline
         </h4>
             <Timeline simple stories={faces} />
           </ItemGrid>

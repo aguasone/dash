@@ -16,6 +16,10 @@ import Tooltip from 'material-ui/Tooltip'
 import Edit from '@material-ui/icons/Edit'
 import DateRange from "@material-ui/icons/DateRange";
 import Extension from '@material-ui/icons/Extension'
+import AccessTime from "@material-ui/icons/AccessTime";
+import Fingerprint from "@material-ui/icons/Fingerprint";
+
+
 
 // core components
 import GridContainer from 'components/Grid/GridContainer.jsx'
@@ -46,7 +50,6 @@ class TimelinePage extends React.Component {
 
   // Setting up websocket client connection
   componentWillMount() {
-    console.log(this.props);
     this.props.fetchCustomers()
     this.socket.on('reload', () => this._socketReload())
     this.socket.on('update', (id) => this._socketUpdate(id))
@@ -117,12 +120,23 @@ class TimelinePage extends React.Component {
     const { classes } = this.props
     let faces
 
+    const colors = [
+      "primary",
+      "warning",
+      "danger",
+      "success",
+      "info",
+      "rose"
+    ]
+
+
     if (store.face.customers) {
       faces = store.face.customers.map((item, index) => {
       //  let date = new Date(item.date.toString().replace(/^(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)$/, '$4:$5:$6 $2/$3/$1'))
-        let since = moment(item.date, 'YYYYMMDDHHmmSS').fromNow()
+        let since = 'added ' + moment(item.date, 'YYYYMMDDHHmmSS').fromNow()
         //let itemDate = moment(item.date, 'YYYYMMDDHHmmSS').format('DD-MM-YYYY HH:mm:ss')
         
+        var titleColor = colors[Math.floor(Math.random() * colors.length)];
         let photo = 'https://gitlab.exception34.com/photo/'
 
         let faceDetected = photo + item.image_processed
@@ -141,18 +155,20 @@ class TimelinePage extends React.Component {
         if (!item.customer) item.customer = {}
 
         return {
-          badgeColor: 'success',
-          badgeIcon: Extension,
+          badgeColor: titleColor,
+          badgeIcon: Fingerprint,
           inverted,
+          title: item.customer.firstname + ' ' + item.customer.lastname,
+          titleColor: titleColor,
           body: (
             <TimelineCard
               image={faceDetected}
               image2={faceKnown}
               title={item.customer.firstname + ' ' + item.customer.lastname}
               text={item.customer.email}
-              price={since}
-              statIcon={DateRange}
-              statText=''
+              price=''
+              statIcon={AccessTime}
+              statText={since}
               hover
               underImage={
                 <div>
@@ -171,7 +187,8 @@ class TimelinePage extends React.Component {
                 </div>
               }
             />
-          )
+          ),
+      //    footerTitle: "11 hours ago via Twitter"
         }
       }
       )
@@ -182,7 +199,7 @@ class TimelinePage extends React.Component {
         {this.state.alert}
         <Heading title='Timeline' textAlign='center' />
         <GridContainer>
-          <ItemGrid xs={12}>
+          <ItemGrid xs={12} sm={8} md={8}>
             <Timeline stories={faces} />
           </ItemGrid>
         </GridContainer>
