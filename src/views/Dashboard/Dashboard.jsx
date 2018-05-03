@@ -42,6 +42,7 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props)
     this.socket = io('https://gitlab.exception34.com', { secure: true })
+    this.props.addSocketToState(this.socket)
     this.socket.on('reload', (stats) => this._socketReload(stats))
     this.state = {
       value: 0,
