@@ -30,47 +30,73 @@ import ItemGrid from "components/Grid/ItemGrid.jsx";
 import StatsCard from "components/Cards/StatsCard.jsx";
 import ChartCard from "components/Cards/ChartCard.jsx";
 
-import {
-  dailySalesChart
-} from "variables/charts";
-
 import dashboardStyle from "assets/jss/material-dashboard-pro-react/views/dashboardStyle";
+var Chartist = require("chartist");
+var delays = 80,
+  durations = 500;
+var delays2 = 80,
+  durations2 = 500;
 
-const io = require('socket.io-client')
+let dailySalesChart = {
+  data: {
+    labels: ["M", "T", "W", "T", "F", "S", "S"],
+    series: [[2]]
+  },
+  options: {
+    lineSmooth: Chartist.Interpolation.cardinal({
+      tension: 0
+    }),
+    low: 0,
+    high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+    chartPadding: {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    }
+  },
+  // for animation
+  animation: {
+    draw: function(data) {
+      if (data.type === "line" || data.type === "area") {
+        data.element.animate({
+          d: {
+            begin: 600,
+            dur: 700,
+            from: data.path
+              .clone()
+              .scale(1, 0)
+              .translate(0, data.chartRect.height())
+              .stringify(),
+            to: data.path.clone().stringify(),
+            easing: Chartist.Svg.Easing.easeOutQuint
+          }
+        });
+      } else if (data.type === "point") {
+        data.element.animate({
+          opacity: {
+            begin: (data.index + 1) * delays,
+            dur: durations,
+            from: 0,
+            to: 1,
+            easing: "ease"
+          }
+        });
+      }
+    }
+  }
+};
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props)
-    this.socket = io('https://gitlab.exception34.com', { secure: true })
-    this.props.addSocketToState(this.socket)
-    this.socket.on('reload', (stats) => this._socketReload(stats))
     this.state = {
       value: 0,
-      customer_24: 0
     };
   }
   componentWillMount() {
-    console.log('mount');
-    
     this.props.fetchCustomers()
   }
-
-componentDidMount(){
-  console.log('emit');
-   this.socket.emit('new')
-}
-
-  componentWillUnmount() {
-    console.log('unmount');
-    
-    this.socket.close()
-  }
-  _socketReload(stats) {
-    console.log('reload!!!')
-    console.log(stats);
-    this.setState({customer_24: stats[0].value||0})
-  }
-
   handleChange = (event, value) => {
     this.setState({ value });
   };
@@ -87,7 +113,7 @@ componentDidMount(){
               icon={Accessibility}
               iconColor="orange"
               title="Total Customers"
-              description={this.state.customer_24}
+              description={this.props.state.face.stats[0].value||0}
               statIcon={DateRange}
               statText="Last 24 Hours"
             />
@@ -96,30 +122,10 @@ componentDidMount(){
             <StatsCard
               icon={Store}
               iconColor="green"
-              title="Revenue"
-              description="$34,245"
+              title="Total Known Customers"
+              description={this.props.state.face.stats[1].total||0}
               statIcon={DateRange}
-              statText="Last 24 Hours"
-            />
-          </ItemGrid>
-          <ItemGrid xs={12} sm={6} md={6} lg={3}>
-            <StatsCard
-              icon={InfoOutline}
-              iconColor="red"
-              title="Fixed Issues"
-              description="75"
-              statIcon={LocalOffer}
-              statText="Tracked from Github"
-            />
-          </ItemGrid>
-          <ItemGrid xs={12} sm={6} md={6} lg={3}>
-            <StatsCard
-              icon={Accessibility}
-              iconColor="blue"
-              title="Followers"
-              description="+245"
-              statIcon={Update}
-              statText="Just Updated"
+              statText="Overall"
             />
           </ItemGrid>
         </GridContainer>

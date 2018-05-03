@@ -6,6 +6,10 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
+// redux
+import { connect } from 'react-redux'
+import * as actions from '../actions'
+
 // material-ui components
 import withStyles from "material-ui/styles/withStyles";
 
@@ -21,29 +25,55 @@ import appStyle from "assets/jss/material-dashboard-pro-react/layouts/dashboardS
 import image from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/logo-white.svg";
 
+const io = require('socket.io-client')
+
 const switchRoutes = (
   <Switch>
-    {dashboardRoutes.map((prop, key) => {
-      if (prop.redirect)
-        return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
-      if (prop.collapse)
-        return prop.views.map((prop, key) => {
-          return (
-            <Route path={prop.path} component={prop.component} key={key} />
-          );
-        });
-      return <Route path={prop.path} component={prop.component} key={key} />;
-    })}
+  {dashboardRoutes.map((prop, key) => {
+    if (prop.redirect)
+      return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
+    if (prop.collapse)
+      return prop.views.map((prop, key) => {
+        return (
+          <Route path={prop.path} component={prop.component} key={key} />
+        );
+      });
+    return <Route path={prop.path} component={prop.component} key={key} />;
+  })}
   </Switch>
 );
 
 var ps;
 
 class Dashboard extends React.Component {
-  state = {
-    mobileOpen: false,
-    miniActive: false
-  };
+  constructor(props) {
+    super(props)
+    this.socket = io('https://gitlab.exception34.com', { secure: true })
+    this.props.addSocketToState(this.socket)
+    this.state = {
+      mobileOpen: false,
+      miniActive: false,
+      customer_24: 0
+    };
+  }
+  componentWillMount() {
+    console.log('mount:layout');
+    this.socket.on('reload', (stats) => this._socketReload(stats))
+    this.socket.on('update', (id) => this._socketUpdate(id))
+//    this.socket.on('edit', (id) => this._socketEdit(id))
+    //this.props.fetchCustomers()
+  }
+  _socketReload(stats) {
+    console.log('reload!!!')
+    console.log(stats);
+
+    this.props.loadStats(stats)
+    this.props.fetchCustomers()
+  }
+  _socketUpdate(id) {
+    console.log('upload!!!')
+    this.props.fetchCustomer(id)
+  }
   handleDrawerToggle = () => {
     this.setState({ mobileOpen: !this.state.mobileOpen });
   };
@@ -58,11 +88,16 @@ class Dashboard extends React.Component {
         suppressScrollY: false
       });
     }
+    console.log('emit');
+    this.socket.emit('new')
   }
   componentWillUnmount() {
     if (navigator.platform.indexOf("Win") > -1) {
       ps.destroy();
     }
+    console.log('unmount:layout');
+    this.socket.close()
+    this.props.addSocketToState(null)
   }
   componentDidUpdate(e) {
     if (e.history.location.pathname !== e.location.pathname) {
@@ -80,40 +115,40 @@ class Dashboard extends React.Component {
       cx({
         [classes.mainPanelSidebarMini]: this.state.miniActive,
         [classes.mainPanelWithPerfectScrollbar]:
-          navigator.platform.indexOf("Win") > -1
+        navigator.platform.indexOf("Win") > -1
       });
     return (
       <div className={classes.wrapper}>
-        <Sidebar
-          routes={dashboardRoutes}
-          logoText={"Ex34 Face"}
-          logo={logo}
-          image={image}
-          handleDrawerToggle={this.handleDrawerToggle}
-          open={this.state.mobileOpen}
-          color="purple"
-          bgColor="black"
-          miniActive={this.state.miniActive}
-          {...rest}
-        />
-        <div className={mainPanel} ref="mainPanel">
-          <Header
-            sidebarMinimize={this.sidebarMinimize.bind(this)}
-            miniActive={this.state.miniActive}
-            routes={dashboardRoutes}
-            handleDrawerToggle={this.handleDrawerToggle}
-            {...rest}
-          />
-          {/* On the /maps/full-screen-maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
-          {this.getRoute() ? (
-            <div className={classes.content}>
-              <div className={classes.container}>{switchRoutes}</div>
-            </div>
-          ) : (
-            <div className={classes.map}>{switchRoutes}</div>
-          )}
-          {this.getRoute() ? <Footer fluid /> : null}
+      <Sidebar
+      routes={dashboardRoutes}
+      logoText={"Ex34 Face"}
+      logo={logo}
+      image={image}
+      handleDrawerToggle={this.handleDrawerToggle}
+      open={this.state.mobileOpen}
+      color="purple"
+      bgColor="black"
+      miniActive={this.state.miniActive}
+      {...rest}
+      />
+      <div className={mainPanel} ref="mainPanel">
+      <Header
+      sidebarMinimize={this.sidebarMinimize.bind(this)}
+      miniActive={this.state.miniActive}
+      routes={dashboardRoutes}
+      handleDrawerToggle={this.handleDrawerToggle}
+      {...rest}
+      />
+      {/* On the /maps/full-screen-maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
+      {this.getRoute() ? (
+        <div className={classes.content}>
+        <div className={classes.container}>{switchRoutes}</div>
         </div>
+      ) : (
+        <div className={classes.map}>{switchRoutes}</div>
+      )}
+      {this.getRoute() ? <Footer fluid /> : null}
+      </div>
       </div>
     );
   }
@@ -123,4 +158,9 @@ Dashboard.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(appStyle)(Dashboard);
+function mapStateToProps(state) {
+  return { state: state }
+}
+
+export default connect(mapStateToProps, actions)(withStyles(appStyle)(Dashboard))
+

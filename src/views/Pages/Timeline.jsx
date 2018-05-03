@@ -31,12 +31,9 @@ import Button from 'components/CustomButtons/Button.jsx'
 
 import dashboardStyle from 'assets/jss/material-dashboard-pro-react/views/dashboardStyle'
 
-const io = require('socket.io-client')
-
 class TimelinePage extends React.Component {
   constructor(props) {
     super(props)
-    this.socket = io('https://gitlab.exception34.com', {secure: true})
     this._onToggle = this._onToggle.bind(this)
     this.hideAlert = this.hideAlert.bind(this)
     this.state = {
@@ -51,17 +48,7 @@ class TimelinePage extends React.Component {
   // Setting up websocket client connection
   componentWillMount() {
     this.props.fetchCustomers()
-    this.socket.on('reload', () => this._socketReload())
-    this.socket.on('update', (id) => this._socketUpdate(id))
-    this.socket.on('edit', (id) => this._socketEdit(id))
   }
-
-  componentWillUnmount() {
-    console.log('unmount');
-    
-    this.socket.close()
-  }
-
   _onToggle() {
     let elementProps = { ...this.state.elementProps }
     let elementProps2 = { ...this.state.elementProps2 }
@@ -70,21 +57,11 @@ class TimelinePage extends React.Component {
     this.setState({ elementProps, elementProps2 })
 
     if (elementProps.visible === false) {
-      this.socket.on('reload', () => this._socketReload())
+      this.props.state.face.socket.on('reload', () => this._socketReload())
       this.props.fetchCustomers()
     } else {
-      this.socket.off('reload')
+      this.props.state.face.socket.removeAllListeners('reload')
     }
-  }
-
-  _socketReload() {
-    console.log('reload!!!')
-    this.props.fetchCustomers()
-  }
-
-  _socketUpdate(id) {
-    console.log('upload!!!')
-    this.props.fetchCustomer(id)
   }
 
   basicAlert() {

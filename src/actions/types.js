@@ -21,6 +21,8 @@ export const VISITOR_DELETE_SUCCESS = 'visitor_delete_success';
 export const VISITOR_DELETE_FAIL = 'visitor_delete_fail';
 export const RESET_ADD_FORM = 'reset_add_form';
 
+export const STATS= 'stats';
+
 
 export const FETCH_CUSTOMERS = 'fetch_customers';
 export const FETCH_CUSTOMER = 'fetch_customer';

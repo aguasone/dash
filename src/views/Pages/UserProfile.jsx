@@ -32,8 +32,6 @@ import TimelineCard from 'components/Cards/TimelineCard.jsx'
 
 import dashboardStyle from 'assets/jss/material-dashboard-pro-react/views/dashboardStyle'
 
-const io = require('socket.io-client')
-
 const colors = [
   "primary",
   "warning",
@@ -61,14 +59,13 @@ class UserProfile extends React.Component {
 
     }
 
-    this.socket = io('https://gitlab.exception34.com', { secure: true })
     this.typeClick = this.typeClick.bind(this);
     // this.loadTimeline= this.loadTimeline.bind(this);
   }
 
   componentWillMount() {
     const customer = this.props.size[this.props.match.params[0]];
-    this.socket.emit('edit', customer);
+    this.props.state.face.socket.emit('edit', customer);
     this.loadTimeline(this.props.match.params[0])
 
   }
@@ -76,7 +73,6 @@ class UserProfile extends React.Component {
   componentWillReceiveProps(nextProps) {
     console.log('out');
     this.loadTimeline(nextProps.match.params[0])
-
   }
 
   loadTimeline = (id) => {

@@ -16,6 +16,7 @@ import {
   MAKE_PHOTO_SUCCESS,
   MAKE_PHOTO_FAIL,
   RESET_ADD_FORM,
+  STATS,
   FETCH_CUSTOMERS,
   FETCH_CUSTOMER
 } from '../actions/types'
@@ -26,7 +27,8 @@ export default function (state = {
   customer_update: 'none',
   visitor_delete: 'none',
   photo_make: 'none',
-  photo_upload: 'none'
+  photo_upload: 'none',
+  stats: ['0','0']
 }, action) {
   console.log(action)
   switch (action.type) {
@@ -64,6 +66,8 @@ export default function (state = {
       return { ...state, photo_upload: action.payload }
     case RESET_ADD_FORM:
       return { ...state, visitor_add: 'none', photo_make: 'none', photo_upload: 'none' };
+    case STATS:
+      return { ...state, stats: action.payload};
     case FETCH_CUSTOMERS:
       return { ...state, customers: action.payload }
     case FETCH_CUSTOMER:

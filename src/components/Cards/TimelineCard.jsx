@@ -56,7 +56,6 @@ class TimelineCard extends React.Component {
     }
     let faces
     if (image2 !== undefined) {
-      console.log(image2);
       
       faces = (
         <Button color='defaultNoBackground' customClass={classes.link}>

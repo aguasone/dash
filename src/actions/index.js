@@ -18,6 +18,7 @@ import {
     MAKE_PHOTO_FAIL,
     MAKE_PHOTO_SUCCESS,
     RESET_ADD_FORM,
+    STATS,
     FETCH_CUSTOMERS,
     FETCH_CUSTOMER
 } from './types.js';
@@ -71,6 +72,12 @@ export function authError(error) {
     return {
         type: AUTH_ERROR,
         payload: error
+    };
+}
+export function loadStats(stats) {
+    return {
+        type: STATS,
+        payload: stats 
     };
 }
 
