@@ -51,16 +51,126 @@ class UserProfile extends React.Component {
       requiredState: "",
       typeEmail: "",
       typeEmailState: "",
+      customer: "",
+      customerDate: "",
+      faceDetected: "",
+      faceKnown: "",
+      avatar: "",
+      fullName: "",
+      faces: ""
 
     }
 
     this.socket = io('https://gitlab.exception34.com', { secure: true })
     this.typeClick = this.typeClick.bind(this);
+    // this.loadTimeline= this.loadTimeline.bind(this);
   }
 
   componentWillMount() {
-    const id = this.props.size[this.props.match.params[0]];
-    this.socket.emit('edit', id);
+    const customer = this.props.size[this.props.match.params[0]];
+    this.socket.emit('edit', customer);
+    this.loadTimeline(this.props.match.params[0])
+
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('out');
+    this.loadTimeline(nextProps.match.params[0])
+
+  }
+
+  loadTimeline = (id) => {
+    let faces
+    const customer = this.props.size[id];
+    let customerDate = moment(customer.date, 'YYYYMMDDHHmmSS').format('DD-MM-YYYY HH:mm:ss')
+    let photo = 'https://gitlab.exception34.com/photo/'
+    let faceDetected = photo + customer.image_processed
+    let avatar = photo + customer.image_processed
+    let faceKnown
+    let fullName = customer.customer.firstname + ' ' + customer.customer.lastname
+
+
+    let recognized = false
+    if (customer.known_conf >= 1) {
+      recognized = true
+    }
+
+    if (recognized) {
+      faceKnown = photo + customer.known
+    }
+    this.setState({
+      customer: customer,
+      customerDate: customerDate,
+      faceDetected: faceDetected,
+      faceKnown: faceKnown,
+      avatar: avatar,
+      fullName: fullName,
+      faces: faces
+    })
+
+
+    if (this.props.state.face.customers) {
+
+
+      const store = this.props.state
+      const { classes } = this.props
+      let faces = store.face.customers.map((item, index) => {
+
+        let since = moment(item.date, 'YYYYMMDDHHmmSS').fromNow()
+        var titleColor = colors[Math.floor(Math.random() * colors.length)];
+        let photo = 'https://gitlab.exception34.com/photo/'
+
+        let faceDetected = photo + item.image_processed
+        let faceKnown
+        let to = '/user-page/' + index
+
+        let recognized = false
+        if (item.known_conf >= 1) {
+          recognized = true
+        }
+
+        if (recognized) {
+          faceKnown = photo + item.known
+        }
+        if (!item.customer) item.customer = {}
+
+        return {
+          badgeColor: titleColor,
+          badgeIcon: Fingerprint,
+          body: (
+            <TimelineCard
+              image={faceDetected}
+              image2={faceKnown}
+              title={item.customer.firstname + ' ' + item.customer.lastname}
+              text={item.customer.email}
+              price=''
+              statIcon={AccessTime}
+              statText={since}
+              hover
+              underImage={
+                <div>
+                  <Tooltip
+                    id='tooltip-top'
+                    title='Edit'
+                    placement='bottom'
+                    classes={{ tooltip: classes.tooltip }}
+                  >
+                    <NavLink to={to}>
+                      <Button color='dangerNoBackground' justIcon>
+                        <Edit className={classes.underChartIcons} />
+                      </Button>
+                    </NavLink>
+                  </Tooltip>
+                </div>
+              }
+            />
+          ),
+          //    footerTitle: "11 hours ago via Twitter"
+        }
+      }
+      )
+      this.setState({ faces: faces })
+    }
   }
 
   _onSubmit = (size) => {
@@ -149,99 +259,16 @@ class UserProfile extends React.Component {
   // }
 
   render() {
-    const store = this.props.state
     const { classes } = this.props
-    let faces
-
-    const item = this.props.size[this.props.match.params[0]]
-
-    let itemDate = moment(item.date, 'YYYYMMDDHHmmSS').format('DD-MM-YYYY HH:mm:ss')
-    let photo = 'https://gitlab.exception34.com/photo/'
-    let faceDetected = photo + item.image_processed
-    let avatar = photo + item.image_processed
-    let faceKnown
-    let fullName = item.customer.firstname + ' ' + item.customer.lastname
-console.log('jere');
-
-    let recognized = false
-    if (item.known_conf >= 1) {
-      recognized = true
-    }
-
-    if (recognized) {
-      faceKnown = photo + item.known
-    }
-
-
-    if (store.face.customers) {
-      faces = store.face.customers.map((item, index) => {
-        //  let date = new Date(item.date.toString().replace(/^(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)$/, '$4:$5:$6 $2/$3/$1'))
-        let since = moment(item.date, 'YYYYMMDDHHmmSS').fromNow()
-        //let itemDate = moment(item.date, 'YYYYMMDDHHmmSS').format('DD-MM-YYYY HH:mm:ss')
-        var titleColor = colors[Math.floor(Math.random() * colors.length)];
-
-        let photo = 'https://gitlab.exception34.com/photo/'
-
-        let faceDetected = photo + item.image_processed
-        let faceKnown
-        let to = '/user-page/' + index
-
-        let recognized = false
-        if (item.known_conf >= 1) {
-          recognized = true
-        }
-
-        if (recognized) {
-          faceKnown = photo + item.known
-        }
-        if (!item.customer) item.customer = {}
-
-        return {
-          badgeColor: titleColor,
-          badgeIcon: Fingerprint,
-          body: (
-            <TimelineCard
-              image={faceDetected}
-              image2={faceKnown}
-              title={item.customer.firstname + ' ' + item.customer.lastname}
-              text={item.customer.email}
-              price=''
-              statIcon={AccessTime}
-              statText={since}
-              hover
-              underImage={
-                <div>
-                  <Tooltip
-                    id='tooltip-top'
-                    title='Edit'
-                    placement='bottom'
-                    classes={{ tooltip: classes.tooltip }}
-                  >
-                    <NavLink to={to}>
-                      <Button color='dangerNoBackground' justIcon>
-                        <Edit className={classes.underChartIcons} />
-                      </Button>
-                    </NavLink>
-                  </Tooltip>
-                </div>
-              }
-            />
-          ),
-          //    footerTitle: "11 hours ago via Twitter"
-        }
-      }
-      )
-    }
-
     return (
       <div>
         <GridContainer>
           <ItemGrid xs={12} sm={7} md={8}>
             <ProfileCard
-              avatar={avatar}
-              subtitle={item.customer.age}
-              title={fullName}
-              description={item.customer.email}
+              avatar={this.state.avatar}
+              subtitle={this.state.customer.customer.age}
+              title={this.state.fullName}
+              description={this.state.customer.customer.email}
             />
             <IconCard
               icon={PermIdentity}
@@ -263,7 +290,7 @@ console.log('jere');
                         }}
                       />
                     </ItemGrid>
-                    <ItemGrid xs={12} sm={12} md={3}>
+                    <ItemGrid xs={12} sm={12} md={4}>
                       <CustomInput
                         labelText='Username'
                         id='username'
@@ -273,19 +300,19 @@ console.log('jere');
                       />
                     </ItemGrid>
                     <ItemGrid xs={12} sm={12} md={4}>
-                    <CustomInput
-                      success={this.state.typeEmailState === "success"}
-                      error={this.state.typeEmailState === "error"}
-                      id="typeemail"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        onChange: event =>
-                          this.change(event, "typeEmail", "email"),
-                        type: "email"
-                      }}
-                    />
+                      <CustomInput
+                        success={this.state.typeEmailState === "success"}
+                        error={this.state.typeEmailState === "error"}
+                        id="typeemail"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          onChange: event =>
+                            this.change(event, "typeEmail", "email"),
+                          type: "email"
+                        }}
+                      />
                     </ItemGrid>
                   </GridContainer>
                   <GridContainer>
@@ -294,7 +321,7 @@ console.log('jere');
                         labelText='First Name'
                         id='first-name'
                         inputProps={{
-                          value: `${item.customer.firstname}`
+                          value: `${this.state.customer.customer.firstname}`
                         }}
                         formControlProps={{
                           fullWidth: true
@@ -306,7 +333,7 @@ console.log('jere');
                         labelText='Last Name'
                         id='last-name'
                         inputProps={{
-                          value: `${item.customer.lastname}`
+                          value: `${this.state.customer.customer.lastname}`
                         }}
                         formControlProps={{
                           fullWidth: true
@@ -373,7 +400,7 @@ console.log('jere');
             <h4 className={classes.title}>
               Timeline
         </h4>
-            <Timeline simple stories={faces} />
+            <Timeline simple stories={this.state.faces} />
           </ItemGrid>
         </GridContainer>
       </div>

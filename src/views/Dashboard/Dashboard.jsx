@@ -1,5 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
+
+// redux
+import { connect } from 'react-redux'
+import * as actions from '../../actions'
+
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
 // react plugin for creating vector maps
@@ -31,10 +36,40 @@ import {
 
 import dashboardStyle from "assets/jss/material-dashboard-pro-react/views/dashboardStyle";
 
+const io = require('socket.io-client')
+
 class Dashboard extends React.Component {
-  state = {
-    value: 0
-  };
+  constructor(props) {
+    super(props)
+    this.socket = io('https://gitlab.exception34.com', { secure: true })
+    this.socket.on('reload', (stats) => this._socketReload(stats))
+    this.state = {
+      value: 0,
+      customer_24: 0
+    };
+  }
+  componentWillMount() {
+    console.log('mount');
+    
+    this.props.fetchCustomers()
+  }
+
+componentDidMount(){
+  console.log('emit');
+   this.socket.emit('new')
+}
+
+  componentWillUnmount() {
+    console.log('unmount');
+    
+    this.socket.close()
+  }
+  _socketReload(stats) {
+    console.log('reload!!!')
+    console.log(stats);
+    this.setState({customer_24: stats[0].value||0})
+  }
+
   handleChange = (event, value) => {
     this.setState({ value });
   };
@@ -48,14 +83,12 @@ class Dashboard extends React.Component {
         <GridContainer>
           <ItemGrid xs={12} sm={6} md={6} lg={3}>
             <StatsCard
-              icon={ContentCopy}
+              icon={Accessibility}
               iconColor="orange"
-              title="Used Space"
-              description="49/50"
-              small="GB"
-              statIcon={Warning}
-              statIconColor="danger"
-              statLink={{ text: "Get More Space...", href: "#pablo" }}
+              title="Total Customers"
+              description={this.state.customer_24}
+              statIcon={DateRange}
+              statText="Last 24 Hours"
             />
           </ItemGrid>
           <ItemGrid xs={12} sm={6} md={6} lg={3}>
@@ -125,4 +158,8 @@ Dashboard.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(dashboardStyle)(Dashboard);
+function mapStateToProps(state) {
+  return { state: state }
+}
+
+export default connect(mapStateToProps, actions)(withStyles(dashboardStyle)(Dashboard))

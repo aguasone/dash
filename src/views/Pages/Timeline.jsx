@@ -57,6 +57,8 @@ class TimelinePage extends React.Component {
   }
 
   componentWillUnmount() {
+    console.log('unmount');
+    
     this.socket.close()
   }
 
@@ -199,7 +201,7 @@ class TimelinePage extends React.Component {
         {this.state.alert}
         <Heading title='Timeline' textAlign='center' />
         <GridContainer>
-          <ItemGrid xs={12} sm={8} md={8}>
+          <ItemGrid xs={12} sm={8} md={10}>
             <Timeline stories={faces} />
           </ItemGrid>
         </GridContainer>
