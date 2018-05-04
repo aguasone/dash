@@ -91,9 +91,6 @@ class TimelinePage extends React.Component {
     })
   }
 
-  _socketEdit(id) {
-    console.log('edit!!!')
-  }
   render() {
     const store = this.props.state
     const { classes } = this.props

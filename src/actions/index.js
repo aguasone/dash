@@ -148,16 +148,10 @@ export function fetchCustomer(id) {
 
 
 export function addCustomer(size) {
+console.log(size)
     return function (dispatch) {
 
-      axios.post(`${ROOT_URL2}/customers`, {
-                      date:size.date,
-                      firstname:size.customer.firstname,
-                      lastname:size.customer.lastname,
-                      email:size.customer.email,
-                      age: size.customer.age,
-                      photo: size.known
-                     })
+      axios.post(`${ROOT_URL2}/customers`, size)
         .then((response) => {
           console.log('Response', response);
           dispatch({

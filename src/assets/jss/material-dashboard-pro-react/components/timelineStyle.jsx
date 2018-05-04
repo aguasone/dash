@@ -7,6 +7,7 @@ import {
   primaryColor,
   successColor,
   dangerColor,
+  roseColor,
   warningColor
 } from "assets/jss/material-dashboard-pro-react.jsx";
 const timelineStyle = theme => ({
@@ -94,6 +95,11 @@ const timelineStyle = theme => ({
   },
   primary: {
     backgroundColor: primaryColor,
+    boxShadow:
+      "0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(156, 39, 176, 0.4)"
+  },
+  rose: {
+    backgroundColor: roseColor,
     boxShadow:
       "0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(156, 39, 176, 0.4)"
   },
