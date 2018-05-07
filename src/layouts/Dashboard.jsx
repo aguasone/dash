@@ -7,8 +7,8 @@ import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
 // redux
-import { connect } from 'react-redux'
-import * as actions from '../actions'
+import { connect } from 'react-redux';
+import * as actions from '../actions';
 
 // material-ui components
 import withStyles from "material-ui/styles/withStyles";
@@ -25,13 +25,13 @@ import appStyle from "assets/jss/material-dashboard-pro-react/layouts/dashboardS
 import image from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/logo-white.svg";
 
-const io = require('socket.io-client')
+const io = require('socket.io-client');
 
 const switchRoutes = (
   <Switch>
   {dashboardRoutes.map((prop, key) => {
     if (prop.redirect)
-      return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
+      return <Redirect from={prop.path} to={prop.pathTo} key={key}/>;
     if (prop.collapse)
       return prop.views.map((prop, key) => {
         return (

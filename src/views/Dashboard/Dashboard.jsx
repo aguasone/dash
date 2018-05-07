@@ -104,7 +104,12 @@ class Dashboard extends React.Component {
     this.setState({ value: index });
   };
   render() {
-    const { classes } = this.props;
+    const { classes } = this.props
+    let test, test2 = 0 
+    if (this.props.state.face.stats[0])
+        test =  this.props.state.face.stats[0].value || 0;
+    if (this.props.state.face.stats[1])
+        test2 =  this.props.state.face.stats[1].total;
     return (
       <div>
         <GridContainer>
@@ -113,7 +118,7 @@ class Dashboard extends React.Component {
               icon={Accessibility}
               iconColor="orange"
               title="Total Customers"
-              description={this.props.state.face.stats[0].value||0}
+              description={test}
               statIcon={DateRange}
               statText="Last 24 Hours"
             />
@@ -123,7 +128,7 @@ class Dashboard extends React.Component {
               icon={Store}
               iconColor="green"
               title="Total Known Customers"
-              description={this.props.state.face.stats[1].total||0}
+              description={test2}
               statIcon={DateRange}
               statText="Overall"
             />
