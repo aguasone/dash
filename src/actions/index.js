@@ -24,10 +24,10 @@ import {
 } from './types.js';
 
 const io = require('socket.io-client')
-const socket = io('https://gitlab.exception34.com', {secure: true})
+const socket = io('https://www.exception34.com', {secure: true})
 
-const ROOT_URL = 'https://gitlab.exception34.com/api';
-const ROOT_URL2 = 'https://gitlab.exception34.com/apis';
+const ROOT_URL = 'https://www.exception34.com/api';
+const ROOT_URL2 = 'https://www.exception34.com/apis';
 
 export function signinUser({email, password}) {
     return function (dispatch) {

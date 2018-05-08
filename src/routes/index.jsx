@@ -1,9 +1,10 @@
-import Dashboard from 'layouts/Dashboard.jsx'
-import LoginPage from 'views/Pages/LoginPage.jsx'
+import Pages from "layouts/Pages.jsx";
+import Dashboard from "layouts/Dashboard.jsx";
+import AboutPage from "views/Pages/AboutPage.jsx";
 
 var indexRoutes = [
-  { path: '/d', name: 'Home', component: Dashboard },
-  { path: '/', name: 'Login', component: LoginPage},
-]
+  { path: "/app", name: "Home", component: Dashboard },
+  { path: "/", name: "Pages", component: Pages }
+];
 
-export default indexRoutes
+export default indexRoutes;

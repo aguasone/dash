@@ -17,7 +17,6 @@ import ListItemIcon from "material-ui/List/ListItemIcon";
 import ListItemText from "material-ui/List/ListItemText";
 
 // @material-ui/icons
-import Dashboard from "@material-ui/icons/Dashboard";
 import Menu from "@material-ui/icons/Menu";
 
 import pagesRoutes from "routes/pages.jsx";
@@ -45,18 +44,6 @@ class PagesHeader extends React.Component {
     });
     var list = (
       <List className={classes.list}>
-        <ListItem className={classes.listItem}>
-          <NavLink to={"/dashboard"} className={classes.navLink}>
-            <ListItemIcon className={classes.listItemIcon}>
-              <Dashboard />
-            </ListItemIcon>
-            <ListItemText
-              primary={"Dashboard"}
-              disableTypography={true}
-              className={classes.listItemText}
-            />
-          </NavLink>
-        </ListItem>
         {pagesRoutes.map((prop, key) => {
           if (prop.redirect) {
             return null;
@@ -88,7 +75,7 @@ class PagesHeader extends React.Component {
         <Toolbar className={classes.container}>
           <div className={classes.flex}>
             <Button href="#" className={classes.title}>
-              Material Dashboard Pro React
+             Exception34 
             </Button>
           </div>
           <Hidden smDown implementation="css">

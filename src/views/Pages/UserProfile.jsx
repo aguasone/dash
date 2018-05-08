@@ -122,7 +122,7 @@ class UserProfile extends React.Component {
 
 				let faceDetected = photo + item.image_processed
 				let faceKnown
-				let to = '/user-page/' + index
+				let to = '/app/user-page/' + index
 
 				let recognized = false
 				if (item.known_conf >= 1) {

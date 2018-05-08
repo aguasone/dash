@@ -19,6 +19,7 @@ import CustomInput from "components/CustomInput/CustomInput.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 
 import loginPageStyle from "assets/jss/material-dashboard-pro-react/views/loginPageStyle.jsx";
+import 'assets/test.css';
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -40,19 +41,20 @@ class LoginPage extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.content}>
-        <div className={classes.container}>
+<div className="bgimg-0" >
+     <div className={classes.content}>
+        {/* <div className={classes.container}> */}
           <GridContainer justify="center">
             <ItemGrid xs={12} sm={6} md={4}>
               <form>
                 <LoginCard
                   customCardClass={classes[this.state.cardAnimaton]}
-                  headerColor="rose"
+                  headerColor="green"
                   cardTitle="Login"
                   cardSubtitle="Or Be Classical"
                   footerAlign="center"
                   footer={
-                    <NavLink to='/d/dashboard'>
+                    <NavLink to='/app/dashboard'>
                     <Button color="roseNoBackground" wd size="lg">
                       Let's Go
                   </Button>
@@ -126,8 +128,9 @@ class LoginPage extends React.Component {
               </form>
             </ItemGrid>
           </GridContainer>
+          </div>
         </div>
-      </div>
+      // </div>
     );
   }
 }

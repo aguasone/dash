@@ -1,0 +1,32 @@
+/* Create a Parallax Effect */
+.bgimg-1, .bgimg-2, .bgimg-3 {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* First image (Logo. Full height) */
+.bgimg-0 {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('./parallax6.jpg');
+}
+
+.bgimg-1 {
+    background-image: url('./parallax6.jpg');
+    min-height: 100vh;
+}
+
+/* Second image (Portfolio) */
+.bgimg-2 {
+    background-image: url("./parallax8.jpg");
+    min-height: 600px;
+}
+
+/* Third image (Contact) */
+.bgimg-3 {
+    background-image: url("./parallax6.jpg");
+    min-height: 100vh;
+}
