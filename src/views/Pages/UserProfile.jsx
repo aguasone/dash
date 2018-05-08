@@ -83,7 +83,7 @@ class UserProfile extends React.Component {
 		let faces
 		const customer = this.props.size[id];
 		let customerDate = moment(customer.date, 'YYYYMMDDHHmmSS').format('DD-MM-YYYY HH:mm:ss')
-		let photo = 'https://gitlab.exception34.com/photo/'
+		let photo = 'https://www.exception34.com/photo/'
 		let faceDetected = photo + customer.image_processed
 		let avatar = photo + customer.image_processed
 		let faceKnown
@@ -118,7 +118,7 @@ class UserProfile extends React.Component {
 
 				let since = moment(item.date, 'YYYYMMDDHHmmSS').fromNow()
 				var titleColor = colors[Math.floor(Math.random() * colors.length)];
-				let photo = 'https://gitlab.exception34.com/photo/'
+				let photo = 'https://www.exception34.com/photo/'
 
 				let faceDetected = photo + item.image_processed
 				let faceKnown

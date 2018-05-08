@@ -48,7 +48,7 @@ var ps;
 class Dashboard extends React.Component {
   constructor(props) {
     super(props)
-    this.socket = io('https://gitlab.exception34.com', { secure: true })
+    this.socket = io('https://www.exception34.com', { secure: true })
     this.props.addSocketToState(this.socket)
     this.state = {
       mobileOpen: false,
