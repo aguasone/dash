@@ -1,6 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 import { NavLink } from "react-router-dom";
+import ReactDOM from "react-dom";
 
 // redux
 import { connect } from 'react-redux'
@@ -77,6 +78,7 @@ class UserProfile extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		console.log('out');
 		this.loadTimeline(nextProps.match.params[0])
+		ReactDOM.findDOMNode(this).scrollTop = 0
 	}
 
 	loadTimeline = (id) => {

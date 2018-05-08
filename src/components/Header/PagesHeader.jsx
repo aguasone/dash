@@ -48,6 +48,9 @@ class PagesHeader extends React.Component {
           if (prop.redirect) {
             return null;
           }
+          if (prop.hidden) {
+            return null;
+          }
           const navLink =
             classes.navLink +
             cx({

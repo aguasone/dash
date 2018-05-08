@@ -32,6 +32,7 @@ const pagesRoutes = [
     short: "About",
     mini: "PP",
     icon: About,
+    hidden: true,
     component: AboutPage
   },
   {
