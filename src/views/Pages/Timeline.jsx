@@ -57,10 +57,10 @@ class TimelinePage extends React.Component {
     this.setState({ elementProps, elementProps2 })
 
     if (elementProps.visible === false) {
-      this.props.state.face.socket.on('reload', () => this._socketReload())
+      this.props.state.socket.socket.on('reload', () => this._socketReload())
       this.props.fetchCustomers()
     } else {
-      this.props.state.face.socket.removeAllListeners('reload')
+      this.props.state.socket.socket.removeAllListeners('reload')
     }
   }
 
@@ -174,8 +174,8 @@ class TimelinePage extends React.Component {
       <div>
         {this.state.alert}
         <Heading title='Timeline' textAlign='center' />
-        <GridContainer>
-          <ItemGrid xs={12} sm={8} md={10}>
+        <GridContainer justify="center">
+          <ItemGrid xs={9} sm={7} md={8}>
             <Timeline stories={faces} />
           </ItemGrid>
         </GridContainer>

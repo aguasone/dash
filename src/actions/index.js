@@ -175,13 +175,13 @@ console.log(size)
 export function updateCustomer(size) {
     return function (dispatch) {
 
-      axios.patch(`${ROOT_URL2}/customers/${size.customer.id}`, {
+      axios.patch(`${ROOT_URL2}/customers/${size.id}`, {
                       date:size.date,
-                      firstname:size.customer.firstname,
-                      lastname:size.customer.lastname,
-                      email:size.customer.email,
-                      age: size.customer.age,
-                      photo: size.known
+                      firstname:size.firstname,
+                      lastname:size.lastname,
+                      email:size.email,
+                      age: size.age,
+                     // photo: size.known
                      })
         .then((response) => {
           console.log('Response', response);

@@ -20,7 +20,7 @@ var dashRoutes = [
     component: TimelinePage
   },
   {
-    path: '/app/user-page/*',
+    path: '/app/user-page/:id',
     name: 'User Profile',
     icon: Image,
     component: UserProfile,

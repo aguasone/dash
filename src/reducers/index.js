@@ -1,8 +1,11 @@
-import { combineReducers } from 'redux'
-import authReducer from './auth'
+import { combineReducers } from "redux";
+import faceReducer from "./faceReducer";
+import socketReducer from "./socketReducer";
 
 const rootReducer = combineReducers({
-  face: authReducer
-})
+  face: faceReducer,
+  socket: socketReducer
 
-export default rootReducer
+});
+
+export default rootReducer;
