@@ -8,24 +8,24 @@ import Image from '@material-ui/icons/Image'
 
 var dashRoutes = [
   {
-    path: '/dashboard',
+    path: '/d/dashboard',
     name: 'Dashboard',
     icon: DashboardIcon,
     component: Dashboard
   },
   {
-    path: '/timeline-page',
+    path: '/d/timeline-page',
     name: 'Timeline Page',
     icon: Image,
     component: TimelinePage
   },
   {
-    path: '/user-page/*',
+    path: '/d/user-page/*',
     name: 'User Profile',
     icon: Image,
     component: UserProfile,
     hide: true 
   },
-  { redirect: true, path: '/', pathTo: '/dashboard', name: 'Dashboard' }
+  { redirect: true, path: '/d', pathTo: '/d/dashboard', name: 'Dashboard' }
 ]
 export default dashRoutes

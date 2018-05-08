@@ -118,7 +118,7 @@ class TimelinePage extends React.Component {
         let faceDetected = photo + item.image_processed
         let faceKnown
         let inverted = index % 2 ? true : false
-        let to = '/user-page/' + index
+        let to = '/d/user-page/' + index
 
         let recognized = false
         if (item.known_conf >= 1) {

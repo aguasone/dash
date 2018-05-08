@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { NavLink } from "react-router-dom";
 
 // material-ui components
 import withStyles from "material-ui/styles/withStyles";
@@ -51,9 +52,11 @@ class LoginPage extends React.Component {
                   cardSubtitle="Or Be Classical"
                   footerAlign="center"
                   footer={
+                    <NavLink to='/d/dashboard'>
                     <Button color="roseNoBackground" wd size="lg">
                       Let's Go
-                    </Button>
+                  </Button>
+                    </NavLink>
                   }
                   socials={[
                     "fab fa-facebook-square",
