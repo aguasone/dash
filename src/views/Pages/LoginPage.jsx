@@ -35,7 +35,7 @@ class LoginPage extends React.Component {
       function() {
         this.setState({ cardAnimaton: "" });
       }.bind(this),
-      700
+      150
     );
   }
   render() {

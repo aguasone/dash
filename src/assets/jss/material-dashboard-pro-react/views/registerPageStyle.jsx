@@ -51,7 +51,7 @@ const registerPageStyle = {
   },
   checkboxLabel: {
     marginLeft: "6px",
-    color: "rgba(0, 0, 0, 0.26)"
+    color: "rgba(0, 0, 0, 3.26)"
   },
   ...customCheckboxRadioSwitch,
   cardTitle: {

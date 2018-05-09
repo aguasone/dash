@@ -40,7 +40,7 @@ const timelineStyle = theme => ({
     }
   },
   item: {
-    marginBottom: "20px",
+    marginBottom: "0px",
     position: "relative",
     "&:before,&:after": {
       content: '" "',
@@ -127,7 +127,7 @@ const timelineStyle = theme => ({
     width: "45%",
     float: "left",
     padding: "20px",
-    marginBottom: "20px",
+    marginBottom: "0px",
     position: "relative",
     //boxShadow: "0 1px 4px 0 rgba(0, 0, 0, 0.14)",
     borderRadius: "6px",

@@ -16,7 +16,7 @@ const pagesStyle = {
   },
   fullPage: {
     "&:before": {
-      backgroundColor: "rgba(0, 0, 0, 0.15)"
+      backgroundColor: "rgba(0, 0, 0, 0.55)"
     },
     "&:before,&:after": {
       display: "block",

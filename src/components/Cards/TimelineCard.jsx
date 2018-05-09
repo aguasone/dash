@@ -1,26 +1,27 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import cx from 'classnames'
+import React from "react";
+import PropTypes from "prop-types";
+import cx from "classnames";
+import { NavLink } from "react-router-dom";
 
 // material-ui components
-import withStyles from 'material-ui/styles/withStyles'
-import Card from 'material-ui/Card'
-import CardContent from 'material-ui/Card/CardContent'
-import CardHeader from 'material-ui/Card/CardHeader'
-import CardActions from 'material-ui/Card/CardActions'
-import Typography from 'material-ui/Typography'
+import withStyles from "material-ui/styles/withStyles";
+import Card from "material-ui/Card";
+import CardContent from "material-ui/Card/CardContent";
+import CardHeader from "material-ui/Card/CardHeader";
+import CardActions from "material-ui/Card/CardActions";
+import Typography from "material-ui/Typography";
 
 // core components
-import Button from 'components/CustomButtons/Button'
+import Button from "components/CustomButtons/Button";
 
-import timelineCardStyle from 'assets/jss/material-dashboard-pro-react/components/timelineCardStyle.jsx'
+import timelineCardStyle from "assets/jss/material-dashboard-pro-react/components/timelineCardStyle.jsx";
 
 class TimelineCard extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       hover: false
-    }
+    };
   }
   render() {
     const {
@@ -34,34 +35,33 @@ class TimelineCard extends React.Component {
       statLink,
       statText,
       underImage,
+      to,
       hover
-    } = this.props
+    } = this.props;
 
     const cardHeaderClasses =
       classes.cardHeader +
       cx({
-        [' ' + classes.moveImageUp]: this.state.hover && hover
-      })
-    var addHoverEvent = {}
+        [" " + classes.moveImageUp]: this.state.hover && hover
+      });
+    var addHoverEvent = {};
     if (hover) {
       if (navigator.userAgent.match(/iPad/i) != null) {
         addHoverEvent.onClick = () => {
-          this.setState({ hover: !this.state.hover })
-
-        }
+          this.setState({ hover: !this.state.hover });
+        };
       } else {
-        addHoverEvent.onMouseEnter = () => this.setState({ hover: true })
-        addHoverEvent.onMouseLeave = () => this.setState({ hover: false })
+        addHoverEvent.onMouseEnter = () => this.setState({ hover: true });
+        addHoverEvent.onMouseLeave = () => this.setState({ hover: false });
       }
     }
-    let faces
+    let faces;
     if (image2 !== undefined) {
-      
       faces = (
-        <Button color='defaultNoBackground' customClass={classes.link}>
-          <img src={image2} alt='missing' className={classes.cardImage} />
+        <Button color="defaultNoBackground" customClass={classes.link}>
+          <img src={image2} alt="missing" className={classes.cardImage} />
         </Button>
-      )
+      );
     }
 
     return (
@@ -70,9 +70,15 @@ class TimelineCard extends React.Component {
           className={cardHeaderClasses}
           subheader={
             <div>
-              <Button color='defaultNoBackground' customClass={classes.link}>
-                <img src={image} alt='missing' className={classes.cardImage} />
-              </Button>
+              <NavLink to={to||""}>
+                <Button color="defaultNoBackground" customClass={classes.link}>
+                  <img
+                    src={image}
+                    alt="missing"
+                    className={classes.cardImage}
+                  />
+                </Button>
+              </NavLink>
               {faces}
             </div>
           }
@@ -82,13 +88,13 @@ class TimelineCard extends React.Component {
             <div className={classes.underImage}>{underImage}</div>
           ) : null}
           <Typography
-            variant='title'
-            component='h4'
+            variant="title"
+            component="h4"
             className={classes.cardTitle}
           >
             {title}
           </Typography>
-          <Typography component='p' className={classes.cardCategory}>
+          <Typography component="p" className={classes.cardCategory}>
             {text}
           </Typography>
         </CardContent>
@@ -100,10 +106,10 @@ class TimelineCard extends React.Component {
             <this.props.statIcon
               className={
                 classes.cardStatsIcon +
-                ' ' +
-                classes[statIconColor + 'CardStatsIcon']
+                " " +
+                classes[statIconColor + "CardStatsIcon"]
               }
-            />{' '}
+            />{" "}
             {statLink !== undefined ? (
               <a href={statLink.href} className={classes.cardStatsLink}>
                 {statLink.text}
@@ -114,13 +120,13 @@ class TimelineCard extends React.Component {
           </div>
         </CardActions>
       </Card>
-    )
+    );
   }
 }
 
 TimelineCard.defaultProps = {
   hover: false
-}
+};
 
 TimelineCard.propTypes = {
   classes: PropTypes.object.isRequired,
@@ -131,13 +137,13 @@ TimelineCard.propTypes = {
   location: PropTypes.string,
   statIcon: PropTypes.func.isRequired,
   statIconColor: PropTypes.oneOf([
-    'warning',
-    'primary',
-    'danger',
-    'success',
-    'info',
-    'rose',
-    'gray'
+    "warning",
+    "primary",
+    "danger",
+    "success",
+    "info",
+    "rose",
+    "gray"
   ]),
   statLink: PropTypes.object,
   statText: PropTypes.node,
@@ -145,6 +151,6 @@ TimelineCard.propTypes = {
   hover: PropTypes.bool,
   // what to be displayed under tha chart on hover
   underImage: PropTypes.node
-}
+};
 
-export default withStyles(timelineCardStyle)(TimelineCard)
+export default withStyles(timelineCardStyle)(TimelineCard);

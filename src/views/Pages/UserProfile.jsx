@@ -11,12 +11,15 @@ import { addCustomer, updateCustomer, fetchCustomers } from "../../actions";
 import InputLabel from "material-ui/Input/InputLabel";
 import Tooltip from "material-ui/Tooltip";
 import withStyles from "material-ui/styles/withStyles";
+import Snackbar from "components/Snackbar/Snackbar.jsx";
 
 // @material-ui/icons
 import PermIdentity from "@material-ui/icons/PermIdentity";
 import Edit from "@material-ui/icons/Edit";
 import AccessTime from "@material-ui/icons/AccessTime";
-import Fingerprint from "@material-ui/icons/Fingerprint";
+import Pause from "@material-ui/icons/Pause";
+import PlayArrow from "@material-ui/icons/PlayArrow";
+import AddAlert from "@material-ui/icons/AddAlert";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -38,6 +41,11 @@ class UserProfile extends React.Component {
     super(props);
 
     this.state = {
+      tc: null,
+      notificationMessage: "",
+      notificationColor: "success",
+      titleTimeline: "Timeline",
+      badgeIcon: Pause,
       requiredState: "",
       email: "",
       emailState: "",
@@ -55,18 +63,59 @@ class UserProfile extends React.Component {
   }
 
   componentWillMount() {
-    this.props.state.socket.socket.emit("edit", this.props.size[this.props.match.params.id]);
+    this.props.state.socket.socket.emit(
+      "edit",
+      this.props.size[this.props.match.params.id]
+    );
     const customer = this.props.size[this.props.match.params.id];
     this.loadProfile(customer);
     this.loadTimeline();
   }
 
   componentWillReceiveProps(nextProps) {
+	console.log("props")
     const customer = this.props.size[nextProps.match.params.id];
     this.loadProfile(customer);
     this.loadTimeline();
     ReactDOM.findDOMNode(this).scrollTop = 0;
   }
+
+  _onToggle = () => {
+    let elementProps = { ...this.state.elementProps };
+    let elementProps2 = { ...this.state.elementProps2 };
+    elementProps.visible = !elementProps.visible;
+    elementProps2.visible = !elementProps.visible;
+    this.setState({ elementProps, elementProps2 });
+
+    if (elementProps.visible === false) {
+      this.props.state.socket.socket.on("reload", () => this._socketReload());
+      this.showNotification("tc", "FLOW RESTARTED", "Timeline", "success", Pause);
+      this.props.dispatch(fetchCustomers());
+    } else {
+      this.props.state.socket.socket.removeAllListeners("reload");
+      this.showNotification("tc", "FLOW STOPPED", "Timeline (stopped)", "danger", PlayArrow);
+		}
+  };
+
+  showNotification(place, message, title, color, button) {
+    if (!this.state[place]) {
+      var x = [];
+      x[place] = true;
+      x["notificationMessage"] = message;
+      x["notificationColor"] = color;
+      x["titleTimeline"] = title;
+      x["badgeIcon"] = button;
+			this.setState(x);
+      // use this to make the notification autoclose
+      setTimeout(
+        function() {
+          x[place] = false;
+          this.setState(x);
+        }.bind(this),
+        600
+      );
+    }
+	}
 
   loadProfile = customer => {
     if (!customer.customer) customer.customer = {};
@@ -98,7 +147,7 @@ class UserProfile extends React.Component {
       email: customer.customer.email || "",
       age: customer.customer.age || ""
     });
-  }
+  };
 
   loadTimeline = () => {
     if (this.props.state.face.customers) {
@@ -124,8 +173,8 @@ class UserProfile extends React.Component {
         if (!item.customer) item.customer = {};
 
         return {
-          badgeColor: titleColor,
-          badgeIcon: Fingerprint,
+          badgeColor: this.state.notificationColor,
+          badgeIcon: this.state.badgeIcon,
           body: (
             <TimelineCard
               image={faceDetected}
@@ -162,7 +211,6 @@ class UserProfile extends React.Component {
   };
 
   isValidated = () => {
-
     if (
       (this.state.firstnameState === "success" || this.state.firstname) &&
       (this.state.lastnameState === "success" || this.state.lastname) &&
@@ -177,7 +225,6 @@ class UserProfile extends React.Component {
       newCustomer.photo = this.state.customer.known;
       newCustomer.id = this.state.customer.customer.id;
       newCustomer.emitId = this.state.customer.id;
-
 
       if (!this.state.customer.customer.id)
         this.props.dispatch(addCustomer(newCustomer));
@@ -196,7 +243,7 @@ class UserProfile extends React.Component {
       }
     }
     return false;
-  }
+  };
   // function that returns true if value is email, false otherwise
   verifyEmail(value) {
     var emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -251,14 +298,31 @@ class UserProfile extends React.Component {
   render() {
     const { classes } = this.props;
 
+    alert = (
+      <Snackbar
+        place="tc"
+        color={this.state.notificationColor}
+        icon={AddAlert}
+        message={this.state.notificationMessage}
+        open={this.state.tc}
+        closeNotification={() => this.setState({ tc: false })}
+        close
+      />
+    );
+
     return (
       <div>
+        {alert}
         <GridContainer>
           <ItemGrid xs={12} sm={7} md={8}>
             <ProfileCard
               avatar={this.state.avatar}
               subtitle={this.state.customer.customer.age}
-              title={this.state.customer.customer.firstname + ' ' + this.state.customer.customer.lastname}
+              title={
+                this.state.customer.customer.firstname +
+                " " +
+                this.state.customer.customer.lastname
+              }
               description={this.state.customer.customer.email}
             />
             <IconCard
@@ -405,8 +469,12 @@ class UserProfile extends React.Component {
             />
           </ItemGrid>
           <ItemGrid xs={12} sm={5} md={4}>
-            <h4 className={classes.title}>Timeline</h4>
-            <Timeline simple stories={this.state.faces} />
+            <h4 className={classes.title}>{this.state.titleTimeline}</h4>
+            <Timeline
+              onBadgeClick={this._onToggle}
+              simple
+              stories={this.state.faces}
+            />
           </ItemGrid>
         </GridContainer>
       </div>
@@ -415,7 +483,6 @@ class UserProfile extends React.Component {
 }
 
 let select = (state, props) => {
-
   return {
     size: state.face.customers,
     state: state

@@ -7,6 +7,8 @@ import withStyles from "material-ui/styles/withStyles";
 
 // core components
 import Badge from "components/Badge/Badge.jsx";
+import IconButton from "components/CustomButtons/IconButton.jsx";
+import Favorite from "@material-ui/icons/Favorite";
 
 import timelineStyle from "assets/jss/material-dashboard-pro-react/components/timelineStyle.jsx";
 
@@ -31,8 +33,8 @@ function Timeline({ ...props }) {
         const timelineBadgeClasses =
           classes.timelineBadge +
           " " +
-          classes[prop.badgeColor] +
-          " " +
+        //  classes[prop.badgeColor] +
+        //  " " +
           cx({
             [classes.timelineSimpleBadge]: simple
           });
@@ -40,7 +42,8 @@ function Timeline({ ...props }) {
           <li className={classes.item} key={key}>
             {prop.badgeIcon ? (
               <div className={timelineBadgeClasses}>
-                <prop.badgeIcon className={classes.badgeIcon} />
+                {/* <prop.badgeIcon className={classes.badgeIcon} /> */}
+                <IconButton color={prop.badgeColor} onClick={props.onBadgeClick}><prop.badgeIcon className={classes.icons} /></IconButton>
               </div>
             ) : null}
             <div className={panelClasses}>

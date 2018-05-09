@@ -82,7 +82,7 @@ class AboutPage extends React.Component {
 </div>
 
 
-<div>
+<div className="bgimg-1" >
       <div className={classes.container}>
         <GridContainer justify="center">
           <ItemGrid xs={12} sm={12} md={8}>
@@ -238,18 +238,9 @@ class AboutPage extends React.Component {
 </div>
 </div>
 
-<div className="w3-content w3-container w3-padding-64" id="portfolio">
-  <h3 className="w3-center">MY WORK</h3>
-
-</div>
-
 <div className="bgimg-3">
       <div className={classes.container}>
   </div>
-</div>
-
-<div className="w3-content w3-container w3-padding-64" id="contact">
-  <h3 className="w3-center">WHERE I WORK</h3>
 </div>
 </div>
     );
