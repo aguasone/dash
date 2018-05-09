@@ -5,39 +5,23 @@ import PropTypes from "prop-types";
 import withStyles from "material-ui/styles/withStyles";
 
 // @material-ui/icons
-import Weekend from "@material-ui/icons/Weekend";
-import Home from "@material-ui/icons/Home";
-import Business from "@material-ui/icons/Business";
-import AccountBalance from "@material-ui/icons/AccountBalance";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
 import ItemGrid from "components/Grid/ItemGrid.jsx";
-import PricingCard from "components/Cards/PricingCard.jsx";
-import Button from "components/CustomButtons/Button.jsx";
 
-import InputAdornment from "material-ui/Input/InputAdornment";
-import Checkbox from "material-ui/Checkbox";
-import FormControlLabel from "material-ui/Form/FormControlLabel";
 
 // @material-ui/icons
 import Timeline from "@material-ui/icons/Timeline";
 import Code from "@material-ui/icons/Code";
 import Group from "@material-ui/icons/Group";
-import Face from "@material-ui/icons/Face";
-import Email from "@material-ui/icons/Email";
-import LockOutline from "@material-ui/icons/LockOutline";
-import Check from "@material-ui/icons/Check";
 
 // core components
 import RegularCard from "components/Cards/RegularCard.jsx";
-import IconButton from "components/CustomButtons/IconButton.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
 import InfoArea from "components/InfoArea/InfoArea.jsx";
 
 
 // @material-ui/icons
-import Schedule from "@material-ui/icons/Schedule";
 import Info from "@material-ui/icons/Info";
 import LocationOn from "@material-ui/icons/LocationOn";
 import Gavel from "@material-ui/icons/Gavel";
@@ -45,9 +29,7 @@ import HelpOutline from "@material-ui/icons/HelpOutline";
 
 // core components
 import NavPills from "components/NavPills/NavPills.jsx";
-import Accordion from "components/Accordion/Accordion.jsx";
 
-import Success from "components/Typography/Success.jsx";
 import registerPageStyle from "assets/jss/material-dashboard-pro-react/views/registerPageStyle";
 import 'assets/test.css';
 //import 'assets/w3.css';

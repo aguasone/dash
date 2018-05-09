@@ -5,7 +5,7 @@ import ReactDOM from "react-dom";
 
 // redux
 import { connect } from "react-redux";
-import { addCustomer, updateCustomer } from "../../actions";
+import { addCustomer, updateCustomer, fetchCustomers } from "../../actions";
 
 // material-ui components
 import InputLabel from "material-ui/Input/InputLabel";
@@ -15,8 +15,6 @@ import withStyles from "material-ui/styles/withStyles";
 // @material-ui/icons
 import PermIdentity from "@material-ui/icons/PermIdentity";
 import Edit from "@material-ui/icons/Edit";
-import DateRange from "@material-ui/icons/DateRange";
-import Extension from "@material-ui/icons/Extension";
 import AccessTime from "@material-ui/icons/AccessTime";
 import Fingerprint from "@material-ui/icons/Fingerprint";
 
@@ -52,27 +50,25 @@ class UserProfile extends React.Component {
       faceDetected: "",
       faceKnown: "",
       avatar: "",
-      fullName: "",
       faces: ""
     };
-    this.isValidated = this.isValidated.bind(this);
-    // this.loadTimeline= this.loadTimeline.bind(this);
   }
 
   componentWillMount() {
+    this.props.state.socket.socket.emit("edit", this.props.size[this.props.match.params.id]);
     const customer = this.props.size[this.props.match.params.id];
-    this.props.state.socket.socket.emit("edit", customer);
-    this.loadTimeline(this.props.match.params.id);
+    this.loadProfile(customer);
+    this.loadTimeline();
   }
 
   componentWillReceiveProps(nextProps) {
-    this.loadTimeline(nextProps.match.params.id);
+    const customer = this.props.size[nextProps.match.params.id];
+    this.loadProfile(customer);
+    this.loadTimeline();
     ReactDOM.findDOMNode(this).scrollTop = 0;
   }
 
-  loadTimeline = id => {
-    let faces;
-    const customer = this.props.size[id];
+  loadProfile = customer => {
     if (!customer.customer) customer.customer = {};
 
     let customerDate = moment(customer.date, "YYYYMMDDHHmmSS").format(
@@ -82,10 +78,6 @@ class UserProfile extends React.Component {
     let faceDetected = photo + customer.image_processed;
     let avatar = photo + customer.image_processed;
     let faceKnown;
-    let fullName =
-      customer.customer.firstname ||
-      "" + " " + customer.customer.lastname ||
-      "";
 
     let recognized = false;
     if (customer.known_conf >= 1) {
@@ -101,13 +93,14 @@ class UserProfile extends React.Component {
       faceDetected: faceDetected,
       faceKnown: faceKnown,
       avatar: avatar,
-      fullName: fullName,
-      faces: faces,
       firstname: customer.customer.firstname || "",
       lastname: customer.customer.lastname || "",
-      email: customer.customer.email || ""
+      email: customer.customer.email || "",
+      age: customer.customer.age || ""
     });
+  }
 
+  loadTimeline = () => {
     if (this.props.state.face.customers) {
       const store = this.props.state;
       const { classes } = this.props;
@@ -168,14 +161,12 @@ class UserProfile extends React.Component {
     }
   };
 
-  isValidated() {
-		
-		console.log(this.state);
-		
+  isValidated = () => {
+
     if (
       (this.state.firstnameState === "success" || this.state.firstname) &&
       (this.state.lastnameState === "success" || this.state.lastname) &&
-      (this.state.emailState === "success" || this.state.email) 
+      (this.state.emailState === "success" || this.state.email)
     ) {
       let newCustomer = {};
       newCustomer.firstname = this.state.firstname;
@@ -183,16 +174,14 @@ class UserProfile extends React.Component {
       newCustomer.email = this.state.email;
       newCustomer.date = this.state.customer.date;
       newCustomer.age = this.state.age || "";
-			newCustomer.photo = this.state.customer.known;
-			newCustomer.id = this.state.customer.customer.id;
-			
-		console.log(this.state.customer);
+      newCustomer.photo = this.state.customer.known;
+      newCustomer.id = this.state.customer.customer.id;
+      newCustomer.emitId = this.state.customer.id;
+
 
       if (!this.state.customer.customer.id)
-      this.props.dispatch(addCustomer(newCustomer));
-        else
-      this.props.dispatch(updateCustomer(newCustomer));
-			this.setState({customer:newCustomer})
+        this.props.dispatch(addCustomer(newCustomer));
+      else this.props.dispatch(updateCustomer(newCustomer));
 
       return true;
     } else {
@@ -269,7 +258,7 @@ class UserProfile extends React.Component {
             <ProfileCard
               avatar={this.state.avatar}
               subtitle={this.state.customer.customer.age}
-              title={this.state.fullName}
+              title={this.state.customer.customer.firstname + ' ' + this.state.customer.customer.lastname}
               description={this.state.customer.customer.email}
             />
             <IconCard
@@ -426,10 +415,8 @@ class UserProfile extends React.Component {
 }
 
 let select = (state, props) => {
-  console.log("redux");
 
   return {
-    //  uri: "/" + props.params.splat,
     size: state.face.customers,
     state: state
   };

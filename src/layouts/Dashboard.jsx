@@ -57,7 +57,7 @@ class Dashboard extends React.Component {
     };
   }
   componentWillMount() {
-    console.log('mount:layout');
+    console.log('layout:dashboard:willMount')
     this.socket.on('reload', (stats) => this._socketReload(stats))
     this.socket.on('update', (id) => this._socketUpdate(id))
 //    this.socket.on('edit', (id) => this._socketEdit(id))
@@ -81,6 +81,7 @@ class Dashboard extends React.Component {
     return this.props.location.pathname !== "/maps/full-screen-maps";
   }
   componentDidMount() {
+    console.log('layout:dashboard:didMount')
     if (navigator.platform.indexOf("Win") > -1) {
       // eslint-disable-next-line
       ps = new PerfectScrollbar(this.refs.mainPanel, {
@@ -92,14 +93,15 @@ class Dashboard extends React.Component {
     this.socket.emit('new')
   }
   componentWillUnmount() {
+    console.log('layout:dashboard:Unmount')
     if (navigator.platform.indexOf("Win") > -1) {
       ps.destroy();
     }
-    console.log('unmount:layout');
     this.socket.close()
     this.props.addSocketToState(null)
   }
   componentDidUpdate(e) {
+    console.log('layout:dashboard:didUpdate')
     if (e.history.location.pathname !== e.location.pathname) {
       this.refs.mainPanel.scrollTop = 0;
     }

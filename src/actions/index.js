@@ -189,15 +189,15 @@ export function updateCustomer(size) {
               type: CUSTOMER_UPDATE_SUCCESS,
               payload: 'success'
           });
-          socket.emit('update', size.id);
+          socket.emit('update', size.emitId);
           //socket.emit('reload');
-          console.log("Visitor added");
+          console.log("Visitor updated");
         }).catch(response => {
             dispatch({
                 type: CUSTOMER_UPDATE_FAIL,
                 payload: 'fail'
             });
-            console.log("Can't add a visitor");
+            console.log("Can't update a visitor");
         });
 
 

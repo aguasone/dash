@@ -83,12 +83,16 @@ class HeaderLinks extends React.Component {
         <IconButton
           color="inherit"
           aria-label="Dashboard"
-          className={rtlActive ? classes.buttonLinkRTL:classes.buttonLink}
+          className={rtlActive ? classes.buttonLinkRTL : classes.buttonLink}
           classes={{
-            label: rtlActive ? classes.labelRTL:""
+            label: rtlActive ? classes.labelRTL : ""
           }}
         >
-          <Dashboard className={rtlActive ? classes.links + " " + classes.linksRTL:classes.links} />
+          <Dashboard
+            className={
+              rtlActive ? classes.links + " " + classes.linksRTL : classes.links
+            }
+          />
           <Hidden mdUp>
             <p className={classes.linkText}>
               {rtlActive ? "لوحة القيادة" : "Dashboard"}
@@ -103,12 +107,18 @@ class HeaderLinks extends React.Component {
               aria-owns={open ? "menu-list" : null}
               aria-haspopup="true"
               onClick={this.handleClick}
-              className={rtlActive ? classes.buttonLinkRTL:classes.buttonLink}
+              className={rtlActive ? classes.buttonLinkRTL : classes.buttonLink}
               classes={{
-                label: rtlActive ? classes.labelRTL:""
+                label: rtlActive ? classes.labelRTL : ""
               }}
             >
-              <Notifications className={rtlActive ? classes.links + " " + classes.linksRTL:classes.links} />
+              <Notifications
+                className={
+                  rtlActive
+                    ? classes.links + " " + classes.linksRTL
+                    : classes.links
+                }
+              />
               <span className={classes.notifications}>5</span>
               <Hidden mdUp>
                 <p onClick={this.handleClick} className={classes.linkText}>
@@ -179,12 +189,16 @@ class HeaderLinks extends React.Component {
         <IconButton
           color="inherit"
           aria-label="Person"
-          className={rtlActive ? classes.buttonLinkRTL:classes.buttonLink}
+          className={rtlActive ? classes.buttonLinkRTL : classes.buttonLink}
           classes={{
-            label: rtlActive ? classes.labelRTL:""
+            label: rtlActive ? classes.labelRTL : ""
           }}
         >
-          <Person className={rtlActive ? classes.links + " " + classes.linksRTL:classes.links} />
+          <Person
+            className={
+              rtlActive ? classes.links + " " + classes.linksRTL : classes.links
+            }
+          />
           <Hidden mdUp>
             <p className={classes.linkText}>
               {rtlActive ? "الملف الشخصي" : "Profile"}

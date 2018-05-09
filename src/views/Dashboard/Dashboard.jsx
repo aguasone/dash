@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 
 // redux
-import { connect } from 'react-redux'
-import * as actions from '../../actions'
+import { connect } from "react-redux";
+import * as actions from "../../actions";
 
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
@@ -13,13 +13,8 @@ import ChartistGraph from "react-chartist";
 import withStyles from "material-ui/styles/withStyles";
 
 // @material-ui/icons
-import ContentCopy from "@material-ui/icons/ContentCopy";
 import Store from "@material-ui/icons/Store";
-import InfoOutline from "@material-ui/icons/InfoOutline";
-import Warning from "@material-ui/icons/Warning";
 import DateRange from "@material-ui/icons/DateRange";
-import LocalOffer from "@material-ui/icons/LocalOffer";
-import Update from "@material-ui/icons/Update";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import AccessTime from "@material-ui/icons/AccessTime";
 import Accessibility from "@material-ui/icons/Accessibility";
@@ -34,8 +29,6 @@ import dashboardStyle from "assets/jss/material-dashboard-pro-react/views/dashbo
 var Chartist = require("chartist");
 var delays = 80,
   durations = 500;
-var delays2 = 80,
-  durations2 = 500;
 
 let dailySalesChart = {
   data: {
@@ -89,13 +82,13 @@ let dailySalesChart = {
 
 class Dashboard extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      value: 0,
+      value: 0
     };
   }
   componentWillMount() {
-    this.props.fetchCustomers()
+    this.props.fetchCustomers();
   }
   handleChange = (event, value) => {
     this.setState({ value });
@@ -104,12 +97,13 @@ class Dashboard extends React.Component {
     this.setState({ value: index });
   };
   render() {
-    const { classes } = this.props
-    let test, test2 = 0 
+    const { classes } = this.props;
+    let test,
+      test2 = 0;
     if (this.props.state.face.stats[0])
-        test =  this.props.state.face.stats[0].value || 0;
+      test = this.props.state.face.stats[0].value || 0;
     if (this.props.state.face.stats[1])
-        test2 =  this.props.state.face.stats[1].total;
+      test2 = this.props.state.face.stats[1].total;
     return (
       <div>
         <GridContainer>
@@ -171,7 +165,9 @@ Dashboard.propTypes = {
 };
 
 function mapStateToProps(state) {
-  return { state: state }
+  return { state: state };
 }
 
-export default connect(mapStateToProps, actions)(withStyles(dashboardStyle)(Dashboard))
+export default connect(mapStateToProps, actions)(
+  withStyles(dashboardStyle)(Dashboard)
+);

@@ -13,8 +13,7 @@ import {
   successColor,
   infoColor,
   primaryColor,
-  roseColor,
-  boxShadow
+  roseColor
 } from "assets/jss/material-dashboard-pro-react.jsx";
 
 const imagePriceCardStyle = {

@@ -14,8 +14,6 @@ import Tooltip from 'material-ui/Tooltip'
 
 // @material-ui/icons
 import Edit from '@material-ui/icons/Edit'
-import DateRange from "@material-ui/icons/DateRange";
-import Extension from '@material-ui/icons/Extension'
 import AccessTime from "@material-ui/icons/AccessTime";
 import Fingerprint from "@material-ui/icons/Fingerprint";
 

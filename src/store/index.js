@@ -7,12 +7,12 @@ import storage from "redux-persist/lib/storage";
 import reduxThunk from "redux-thunk";
 import { createLogger } from 'redux-logger'
 
-import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 import rootReducer from "../reducers"; // the value from combineReducers
 
 const loggerMiddleware = createLogger()
 
 const middleware = [reduxThunk, loggerMiddleware]
+//const middleware = [reduxThunk]
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
