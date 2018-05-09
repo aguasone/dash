@@ -79,7 +79,9 @@ class TimelineCard extends React.Component {
                   />
                 </Button>
               </NavLink>
+              <NavLink to={to||""}>
               {faces}
+              </NavLink>
             </div>
           }
         />

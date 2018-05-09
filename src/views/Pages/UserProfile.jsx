@@ -185,6 +185,7 @@ class UserProfile extends React.Component {
               statIcon={AccessTime}
               statText={since}
               hover
+              to={to}
               underImage={
                 <div>
                   <Tooltip
