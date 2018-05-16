@@ -1,4 +1,5 @@
 import Dashboard from 'views/Dashboard/Dashboard.jsx'
+import CameraPage from 'views/Camera/Camera.jsx'
 import TimelinePage from 'views/Pages/Timeline.jsx'
 import UserProfile from 'views/Pages/UserProfile.jsx'
 
@@ -18,6 +19,12 @@ var dashRoutes = [
     name: 'Timeline Page',
     icon: Image,
     component: TimelinePage
+  },
+  {
+    path: '/app/camera',
+    name: 'Camera Page',
+    icon: Image,
+    component: CameraPage
   },
   {
     path: '/app/user-page/:id',
