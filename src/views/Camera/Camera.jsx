@@ -116,7 +116,7 @@ class CameraPage extends React.Component {
       test2 = this.props.state.face.stats[1].total;
     return (
       <div>
-       <iframe src="http://localhost:5000/index.html" height="500" width="650" frameBorder="0"/>   
+       <iframe src="http://192.168.0.8:5000/index.html" height="500" width="650" frameBorder="0"/>   
         <GridContainer>
           <ItemGrid xs={12} sm={6} md={6} lg={3}>
             <TimelineCard

@@ -60,6 +60,7 @@ class Dashboard extends React.Component {
     console.log("layout:dashboard:willMount");
     this.socket.on("reload", stats => this._socketReload(stats));
     this.socket.on("update", id => this._socketUpdate(id));
+    this.socket.on("face", face => this._socketFace(face));
     //    this.socket.on('edit', (id) => this._socketEdit(id))
     //this.props.fetchCustomers()
   }
@@ -73,6 +74,10 @@ class Dashboard extends React.Component {
   _socketUpdate(id) {
     console.log("upload!!!");
     this.props.fetchCustomer(id);
+  }
+    _socketFace(face) {
+    console.log("new  face!!!");
+   console.log(face)
   }
 
   handleDrawerToggle = () => {
