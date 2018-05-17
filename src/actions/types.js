@@ -17,6 +17,9 @@ export const CUSTOMER_UPDATE_SUCCESS = 'customer_update_success';
 export const CUSTOMER_UPDATE_FAIL = 'customer_update_fail';
 export const CUSTOMER_EDIT = 'customer_edit';
 
+export const VISITOR_ADD_SUCCESS = 'visitor_add_success';
+export const VISITOR_ADD_FAIL = 'visitor_add_fail';
+
 export const VISITOR_DELETE_SUCCESS = 'visitor_delete_success';
 export const VISITOR_DELETE_FAIL = 'visitor_delete_fail';
 export const RESET_ADD_FORM = 'reset_add_form';

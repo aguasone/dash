@@ -77,7 +77,7 @@ class Dashboard extends React.Component {
   }
     _socketFace(face) {
     console.log("new  face!!!");
-   console.log(face)
+    this.props.addVisitor(JSON.parse(face))
   }
 
   handleDrawerToggle = () => {

@@ -10,6 +10,8 @@ import {
   CUSTOMER_ADD_SUCCESS,
   CUSTOMER_UPDATE_FAIL,
   CUSTOMER_UPDATE_SUCCESS,
+  VISITOR_ADD_SUCCESS,
+  VISITOR_ADD_FAIL,
   VISITOR_DELETE_SUCCESS,
   VISITOR_DELETE_FAIL,
   MAKE_PHOTO_SUCCESS,
@@ -20,9 +22,11 @@ import {
   FETCH_CUSTOMER
 } from "../actions/types";
 
+
 export default function(
   state = {
     customers: [],
+    visitor_add: [],
     customer_add: "none",
     customer_update: "none",
     visitor_delete: "none",
@@ -51,6 +55,17 @@ export default function(
       return { ...state, customer_update: action.payload };
     case CUSTOMER_UPDATE_FAIL:
       return { ...state, customer_update: action.payload };
+    case VISITOR_ADD_SUCCESS:
+      const {name, confidence, image} = action.payload
+      let payload = {}
+      let array = state.visitor_add || []
+      payload.name = action.payload.name
+      payload.confidence = action.payload.confidence
+      payload.image =  "data:image/png;base64," + action.payload.image; 
+      array.push(payload)
+      return { ...state, visitor_add: array };
+    case VISITOR_ADD_FAIL:
+      return { ...state, visitor_add: action.payload };
     case VISITOR_DELETE_SUCCESS:
       return { ...state, visitor_delete: action.payload };
     case VISITOR_DELETE_FAIL:

@@ -36,146 +36,65 @@ import Button from "components/CustomButtons/Button.jsx";
 
 
 import dashboardStyle from "assets/jss/material-dashboard-pro-react/views/dashboardStyle";
-var Chartist = require("chartist");
-var delays = 80,
-  durations = 500;
-
-let dailySalesChart = {
-  data: {
-    labels: ["M", "T", "W", "T", "F", "S", "S"],
-    series: [[2]]
-  },
-  options: {
-    lineSmooth: Chartist.Interpolation.cardinal({
-      tension: 0
-    }),
-    low: 0,
-    high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-    chartPadding: {
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0
-    }
-  },
-  // for animation
-  animation: {
-    draw: function(data) {
-      if (data.type === "line" || data.type === "area") {
-        data.element.animate({
-          d: {
-            begin: 600,
-            dur: 700,
-            from: data.path
-              .clone()
-              .scale(1, 0)
-              .translate(0, data.chartRect.height())
-              .stringify(),
-            to: data.path.clone().stringify(),
-            easing: Chartist.Svg.Easing.easeOutQuint
-          }
-        });
-      } else if (data.type === "point") {
-        data.element.animate({
-          opacity: {
-            begin: (data.index + 1) * delays,
-            dur: durations,
-            from: 0,
-            to: 1,
-            easing: "ease"
-          }
-        });
-      }
-    }
-  }
-};
 
 class CameraPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 0
+     
     };
   }
+
   componentWillMount() {
-    this.props.fetchCustomers();
   }
-  handleChange = (event, value) => {
-    this.setState({ value });
-  };
-  handleChangeIndex = index => {
-    this.setState({ value: index });
-  };
+
+
   render() {
     const { classes } = this.props;
-    let test,
-      test2 = 0;
-    if (this.props.state.face.stats[0])
-      test = this.props.state.face.stats[0].value || 0;
-    if (this.props.state.face.stats[1])
-      test2 = this.props.state.face.stats[1].total;
+    const store = this.props.state;
+    let visitors;
+
+    if (store.face.visitor_add) {
+      visitors = store.face.visitor_add.reverse().map((item, index) => {
+        return (
+          <ItemGrid key={index} xs={4} sm={4} md={2} lg={2}>
+          <TimelineCard 
+                image={item.image}
+                image2={undefined}
+                title={item.confidence}
+                text={item.name}
+                price=""
+                statIcon={AccessTime}
+                statText={""}
+                hover
+                to={""}
+                underImage={
+                  <div>
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Edit"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
+                      <NavLink to={""}>
+                        <Button color="dangerNoBackground" justIcon>
+                          <Edit className={classes.underChartIcons} />
+                        </Button>
+                      </NavLink>
+                    </Tooltip>
+                  </div>
+                }
+              />
+               </ItemGrid>
+            )
+      })
+    }
+
     return (
       <div>
-       <iframe src="http://192.168.0.8:5000/index.html" height="500" width="650" frameBorder="0"/>   
+       <iframe src="http://192.168.0.43:5000/index.html" height="500" width="650" frameBorder="0"/>   
         <GridContainer>
-          <ItemGrid xs={12} sm={6} md={6} lg={3}>
-            <TimelineCard
-              image={""}
-              image2={""}
-              title={""}
-              text={""}
-              price=""
-              statIcon={AccessTime}
-              statText={""}
-              hover
-              to={""}
-              underImage={
-                <div>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="Edit"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
-                  >
-                    <NavLink to={""}>
-                      <Button color="dangerNoBackground" justIcon>
-                        <Edit className={classes.underChartIcons} />
-                      </Button>
-                    </NavLink>
-                  </Tooltip>
-                </div>
-              }
-            />
-          </ItemGrid>
-          <ItemGrid xs={12} sm={6} md={6} lg={3}>
-            <TimelineCard
-              image={""}
-              image2={""}
-              title={""}
-              text={""}
-              price=""
-              statIcon={AccessTime}
-              statText={""}
-              hover
-              to={""}
-              underImage={
-                <div>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="Edit"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
-                  >
-                    <NavLink to={""}>
-                      <Button color="dangerNoBackground" justIcon>
-                        <Edit className={classes.underChartIcons} />
-                      </Button>
-                    </NavLink>
-                  </Tooltip>
-                </div>
-              }
-            />
-          </ItemGrid>
+            {visitors}
         </GridContainer>
       </div>
     );

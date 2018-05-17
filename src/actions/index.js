@@ -13,6 +13,8 @@ import {
     CUSTOMER_ADD_SUCCESS,
     CUSTOMER_UPDATE_FAIL,
     CUSTOMER_UPDATE_SUCCESS,
+    VISITOR_ADD_SUCCESS,
+    VISITOR_ADD_FAIL,
     VISITOR_DELETE_FAIL,
     VISITOR_DELETE_SUCCESS,
     MAKE_PHOTO_FAIL,
@@ -259,6 +261,16 @@ export function uploadDocument({file}, ws) {
                 dispatch({type: UPLOAD_DOCUMENT_SUCCESS, payload: 'success'});
 			})
             .catch(error => dispatch({type: UPLOAD_DOCUMENT_FAIL, payload: 'fail'}));
+    };
+}
+
+export function addVisitor(result) {
+    return function (dispatch) {
+            dispatch({
+                type: VISITOR_ADD_SUCCESS,
+                payload: result
+            });
+            console.log('Add Visitor success');
     };
 }
 
