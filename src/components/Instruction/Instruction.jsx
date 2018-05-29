@@ -29,8 +29,11 @@ function Instruction({ ...props }) {
     [classes.picture]: true,
     [imageClassName]: imageClassName !== undefined
   });
-  return (
-    <div className={instructionClasses}>
+
+  let imageDisplay
+
+  if (image !== "") {
+    imageDisplay = (
       <GridContainer>
         <ItemGrid xs={12} sm={12} md={8}>
           <strong>{title}</strong>
@@ -42,6 +45,22 @@ function Instruction({ ...props }) {
           </div>
         </ItemGrid>
       </GridContainer>
+      )
+  }
+  else {
+    imageDisplay = (
+      <GridContainer>
+        <ItemGrid xs={12} sm={12} md={12}>
+          <strong>{title}</strong>
+          {text}
+        </ItemGrid>
+      </GridContainer>
+      )
+  }
+
+  return (
+    <div className={instructionClasses}>
+       {imageDisplay}
     </div>
   );
 }

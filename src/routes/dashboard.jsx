@@ -2,6 +2,12 @@ import Dashboard from 'views/Dashboard/Dashboard.jsx'
 import CameraPage from 'views/Camera/Camera.jsx'
 import TimelinePage from 'views/Pages/Timeline.jsx'
 import UserProfile from 'views/Pages/UserProfile.jsx'
+import VisitorProfile from 'views/Pages/VisitorProfile.jsx'
+
+// import TempPage from 'views/Components/Notifications.jsx'
+ import TempPage from 'views/Forms/ExtendedForms.jsx'
+import CustomersPage from 'views/Pages/CustomersTable.jsx'
+
 
 // @material-ui/icons
 import DashboardIcon from '@material-ui/icons/Dashboard'
@@ -14,11 +20,23 @@ var dashRoutes = [
     icon: DashboardIcon,
     component: Dashboard
   },
+  // {
+  //   path: '/app/timeline-page',
+  //   name: 'Timeline Page',
+  //   icon: Image,
+  //   component: TimelinePage
+  // },
+  // {
+  //   path: '/app/customers',
+  //   name: 'Temp Page',
+  //   icon: Image,
+  //   component: TempPage
+  // },
   {
-    path: '/app/timeline-page',
-    name: 'Timeline Page',
+    path: '/app/temp',
+    name: 'Customers Page',
     icon: Image,
-    component: TimelinePage
+    component: CustomersPage
   },
   {
     path: '/app/camera',
@@ -31,7 +49,14 @@ var dashRoutes = [
     name: 'User Profile',
     icon: Image,
     component: UserProfile,
-    hide: true 
+    hide: true
+  },
+  {
+    path: '/app/visitor-page/:id',
+    name: 'Visitor Profile',
+    icon: Image,
+    component: VisitorProfile,
+    hide: true
   },
   { redirect: true, path: '/', pathTo: '/', name: 'Dashboard' }
 ]

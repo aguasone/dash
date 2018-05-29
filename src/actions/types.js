@@ -13,12 +13,18 @@ export const UPLOAD_DOCUMENT_FAIL = 'upload_document_fail';
 
 export const CUSTOMER_ADD_SUCCESS = 'customer_add_success';
 export const CUSTOMER_ADD_FAIL = 'customer_add_fail';
+export const CUSTOMER_DELETE_SUCCESS = 'customer_delete_success';
+export const CUSTOMER_DELETE_FAIL = 'customer_delete_fail';
 export const CUSTOMER_UPDATE_SUCCESS = 'customer_update_success';
 export const CUSTOMER_UPDATE_FAIL = 'customer_update_fail';
 export const CUSTOMER_EDIT = 'customer_edit';
 
-export const VISITOR_ADD_SUCCESS = 'visitor_add_success';
-export const VISITOR_ADD_FAIL = 'visitor_add_fail';
+export const VISITOR_KNOWN_ADD_SUCCESS = 'visitor_known_add_success';
+export const VISITOR_KNOWN_ADD_FAIL = 'visitor_known_add_fail';
+export const VISITOR_UNKNOWN_ADD_SUCCESS = 'visitor_unknown_add_success';
+export const VISITOR_UNKNOWN_ADD_FAIL = 'visitor_unknown_add_fail';
+export const VISITOR_UNKNOWN_UPDATE_SUCCESS = 'visitor_unknown_update_success';
+
 
 export const VISITOR_DELETE_SUCCESS = 'visitor_delete_success';
 export const VISITOR_DELETE_FAIL = 'visitor_delete_fail';

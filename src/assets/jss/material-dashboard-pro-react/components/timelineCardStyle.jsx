@@ -17,7 +17,9 @@ import {
 } from "assets/jss/material-dashboard-pro-react.jsx";
 
 const imagePriceCardStyle = {
-  card,
+  card: {
+    ...card
+  },
   cardHeader: {
     ...cardHeader,
     padding: "0",
@@ -31,7 +33,7 @@ const imagePriceCardStyle = {
     marginLeft: "1px",
     marginRight: "1px",
     marginTop: "-30px",
-    borderRadius: "6px",
+    borderRadius: "6px"
   },
   underImage: {
     position: "absolute",
@@ -65,7 +67,7 @@ const imagePriceCardStyle = {
   },
   cardCategory: {
     marginBottom: "0",
-    color: grayColor,
+    // color: grayColor,
     ...defaultFont,
     fontSize: "0.9em",
     textAlign: "center"
@@ -83,7 +85,7 @@ const imagePriceCardStyle = {
   },
   cardStats: {
     lineHeight: "22px",
-    color: grayColor,
+    // color: grayColor,
     fontSize: "12px",
     display: "inline-block",
     marginRight: "0",
@@ -96,16 +98,19 @@ const imagePriceCardStyle = {
     height: "16px"
   },
   warningCardStatsIcon: {
-    color: warningColor
+    // color: warningColor,
+    background: warningColor
   },
   primaryCardStatsIcon: {
     color: primaryColor
   },
   dangerCardStatsIcon: {
-    color: dangerColor
+    // color: dangerColor,
+    background: dangerColor
   },
   successCardStatsIcon: {
-    color: successColor
+    // color: successColor,
+    background: successColor
   },
   infoCardStatsIcon: {
     color: infoColor

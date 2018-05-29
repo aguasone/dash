@@ -34,7 +34,7 @@ import TimelineCard from "components/Cards/TimelineCard.jsx";
 
 import dashboardStyle from "assets/jss/material-dashboard-pro-react/views/dashboardStyle";
 
-class UserProfile extends React.Component {
+class VisitorProfile extends React.Component {
   constructor(props) {
     super(props);
 
@@ -306,8 +306,6 @@ class UserProfile extends React.Component {
   render() {
     const { classes } = this.props;
 
-
-
     return (
       <div>
         {this.state.alert}
@@ -482,9 +480,9 @@ class UserProfile extends React.Component {
 
 let select = (state, props) => {
   return {
-    size: state.face.customers,
+    size: state.face.visitor_add,
     state: state
   };
 };
 
-export default connect(select)(withStyles(dashboardStyle)(UserProfile));
+export default connect(select)(withStyles(dashboardStyle)(VisitorProfile));

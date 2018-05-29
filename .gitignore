@@ -35,3 +35,7 @@ src/assets/\.DS_Store
 CHANGELOG\.md
 
 \.DS_Store
+
+*.sublime-workspace
+
+\.vscode/

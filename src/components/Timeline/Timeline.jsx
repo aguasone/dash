@@ -8,7 +8,6 @@ import withStyles from "material-ui/styles/withStyles";
 // core components
 import Badge from "components/Badge/Badge.jsx";
 import IconButton from "components/CustomButtons/IconButton.jsx";
-import Favorite from "@material-ui/icons/Favorite";
 
 import timelineStyle from "assets/jss/material-dashboard-pro-react/components/timelineStyle.jsx";
 

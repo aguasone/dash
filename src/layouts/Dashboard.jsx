@@ -25,8 +25,6 @@ import appStyle from "assets/jss/material-dashboard-pro-react/layouts/dashboardS
 import image from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/logo-white.svg";
 
-const io = require("socket.io-client");
-
 const switchRoutes = (
   <Switch>
     {dashboardRoutes.map((prop, key) => {
@@ -48,7 +46,7 @@ var ps;
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-    this.socket = io("https://www.exception34.com", { secure: true });
+    this.socket = new WebSocket("ws://exception34.com:1880/control");
     this.props.addSocketToState(this.socket);
     this.state = {
       mobileOpen: false,
@@ -58,11 +56,23 @@ class Dashboard extends React.Component {
   }
   componentWillMount() {
     console.log("layout:dashboard:willMount");
-    this.socket.on("reload", stats => this._socketReload(stats));
-    this.socket.on("update", id => this._socketUpdate(id));
-    this.socket.on("face", face => this._socketFace(face));
+    this.socket.onmessage = event => {
+      console.log("event")
+      event = JSON.parse(event.data)
+      if (event.action === 'add_unknown')
+        this._socketUnknownFace(event)
+      if (event.action === 'add_known')
+        this._socketKnownFace(event)
+      if (event.action === 'delete')
+        this._socketReload(event)
+      if (event.action === 'add')
+        this._socketUpdate(event)
+    }
+    // this.socket.on("reload", stats => this._socketReload(stats));
+    // this.socket.on("update", id => this._socketUpdate(id));
+    // this.socket.on("face", face => this._socketFace(face));
     //    this.socket.on('edit', (id) => this._socketEdit(id))
-    //this.props.fetchCustomers()
+    this.props.fetchCustomers()
   }
   _socketReload(stats) {
     console.log("reload!!!");
@@ -71,13 +81,17 @@ class Dashboard extends React.Component {
     this.props.loadStats(stats);
     this.props.fetchCustomers();
   }
-  _socketUpdate(id) {
-    console.log("upload!!!");
-    this.props.fetchCustomer(id);
+  _socketUpdate(face) {
+    console.log("upload visitor!!!");
+    this.props.updateUnknownVisitor(face);
   }
-    _socketFace(face) {
+    _socketUnknownFace(face) {
     console.log("new  face!!!");
-    this.props.addVisitor(JSON.parse(face))
+    this.props.addUnknownVisitor(face)
+  }
+    _socketKnownFace(face) {
+    console.log("known  face!!!");
+    this.props.addKnownVisitor(face)
   }
 
   handleDrawerToggle = () => {
@@ -96,7 +110,7 @@ class Dashboard extends React.Component {
       });
     }
     console.log("emit");
-    this.socket.emit("new");
+    //this.socket.emit("new");
   }
   componentWillUnmount() {
     console.log("layout:dashboard:Unmount");

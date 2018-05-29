@@ -39,7 +39,18 @@ class TimelinePage extends React.Component {
       badgeIcon: Pause,
       noticeModal: false,
       elementProps: { enter: { animation: "fade" }, visible: false },
-      elementProps2: { enter: { animation: "fade" }, visible: false }
+      elementProps2: { enter: { animation: "fade" }, visible: false },
+      alert: (
+        <Snackbar
+          place="tc"
+          color={this.state.notificationColor}
+          icon={AddAlert}
+          message={this.state.notificationMessage}
+          open={this.state.tc}
+          closeNotification={() => this.setState({ tc: false })}
+          close
+        />
+      )
     };
   }
 
@@ -57,11 +68,23 @@ class TimelinePage extends React.Component {
 
     if (elementProps.visible === false) {
       this.props.state.socket.socket.on("reload", () => this._socketReload());
-      this.showNotification("tc", "FLOW RESTARTED", "Timeline", "success", Pause);
+      this.showNotification(
+        "tc",
+        "FLOW RESTARTED",
+        "Timeline",
+        "success",
+        Pause
+      );
       this.props.fetchCustomers();
     } else {
       this.props.state.socket.socket.removeAllListeners("reload");
-      this.showNotification("tc", "FLOW STOPPED", "Timeline (stopped)", "danger", PlayArrow);
+      this.showNotification(
+        "tc",
+        "FLOW STOPPED",
+        "Timeline (stopped)",
+        "danger",
+        PlayArrow
+      );
     }
   };
 
@@ -90,17 +113,6 @@ class TimelinePage extends React.Component {
     const { classes } = this.props;
     let faces;
 
-    alert = (
-      <Snackbar
-        place="tc"
-        color={this.state.notificationColor}
-        icon={AddAlert}
-        message={this.state.notificationMessage}
-        open={this.state.tc}
-        closeNotification={() => this.setState({ tc: false })}
-        close
-      />
-    );
     const colors = ["primary", "warning", "danger", "success", "info", "rose"];
 
     if (store.face.customers) {
@@ -170,7 +182,7 @@ class TimelinePage extends React.Component {
     return (
       <div>
         <Heading title={this.state.titleTimeline} textAlign="center" />
-        {alert}
+        {this.state.alert}
         <GridContainer justify="center">
           <ItemGrid xs={12} sm={7} md={8}>
             <Timeline onBadgeClick={this._onToggle} stories={faces} />

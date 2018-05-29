@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
-import { NavLink } from "react-router-dom";
 
 // material-ui components
 import withStyles from "material-ui/styles/withStyles";
@@ -14,9 +13,9 @@ import Typography from "material-ui/Typography";
 // core components
 import Button from "components/CustomButtons/Button";
 
-import timelineCardStyle from "assets/jss/material-dashboard-pro-react/components/timelineCardStyle.jsx";
+import imagePriceCardStyle from "assets/jss/material-dashboard-pro-react/components/imagePriceCardStyle.jsx";
 
-class TimelineCard extends React.Component {
+class ImagePriceCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,7 +26,6 @@ class TimelineCard extends React.Component {
     const {
       classes,
       image,
-      image2,
       title,
       text,
       price,
@@ -35,12 +33,8 @@ class TimelineCard extends React.Component {
       statLink,
       statText,
       underImage,
-      to,
-      hover,
-      onClickFn,
-      index
+      hover
     } = this.props;
-
     const cardHeaderClasses =
       classes.cardHeader +
       cx({
@@ -49,65 +43,21 @@ class TimelineCard extends React.Component {
     var addHoverEvent = {};
     if (hover) {
       if (navigator.userAgent.match(/iPad/i) != null) {
-        addHoverEvent.onClick = () => {
+        addHoverEvent.onClick = () =>
           this.setState({ hover: !this.state.hover });
-        };
       } else {
         addHoverEvent.onMouseEnter = () => this.setState({ hover: true });
         addHoverEvent.onMouseLeave = () => this.setState({ hover: false });
       }
     }
-    let faces;
-    let imageFn;
-
-    if (image2 !== undefined) {
-      faces = (
-        <Button color="defaultNoBackground" customClass={classes.link}>
-          <img src={image2} alt="missing" className={classes.cardImage} />
-        </Button>
-      );
-    }
-
-    if (onClickFn === undefined) {
-      imageFn = (
-        <NavLink to={to||""}>
-          <Button color="defaultNoBackground" customClass={classes.link}>
-            <img
-              src={image}
-              alt="missing"
-              className={classes.cardImage}
-            />
-          </Button>
-        </NavLink>
-        )
-    } else {
-      imageFn = (
-          <Button color="defaultNoBackground" customClass={classes.link}  onClick={() => onClickFn(index)}>
-            <img
-              src={image}
-              alt="missing"
-              className={classes.cardImage}
-            />
-          </Button>
-        )
-    }
-
-
     return (
-      <Card className={
-        classes.card +
-        " " +
-        classes[statIconColor + "CardStatsIcon"]
-      } {...addHoverEvent}>
+      <Card className={classes.card} {...addHoverEvent}>
         <CardHeader
           className={cardHeaderClasses}
           subheader={
-            <div>
-              {imageFn}
-              <NavLink to={to||""}>
-              {faces}
-              </NavLink>
-            </div>
+            <Button color="defaultNoBackground" customClass={classes.link}>
+              <img src={image} alt="..." className={classes.cardImage} />
+            </Button>
           }
         />
         <CardContent className={classes.cardContent}>
@@ -151,11 +101,11 @@ class TimelineCard extends React.Component {
   }
 }
 
-TimelineCard.defaultProps = {
-  hover: false
+ImagePriceCard.defaultProps = {
+  hover: false,
 };
 
-TimelineCard.propTypes = {
+ImagePriceCard.propTypes = {
   classes: PropTypes.object.isRequired,
   image: PropTypes.string,
   title: PropTypes.node,
@@ -180,4 +130,4 @@ TimelineCard.propTypes = {
   underImage: PropTypes.node
 };
 
-export default withStyles(timelineCardStyle)(TimelineCard);
+export default withStyles(imagePriceCardStyle)(ImagePriceCard);

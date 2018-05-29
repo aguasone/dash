@@ -4,34 +4,32 @@ import {
   AUTH_ERROR,
   FETCH_LOGS,
   FETCH_VISITORS,
-  UPLOAD_DOCUMENT_FAIL,
-  UPLOAD_DOCUMENT_SUCCESS,
   CUSTOMER_ADD_FAIL,
   CUSTOMER_ADD_SUCCESS,
+  CUSTOMER_DELETE_FAIL,
+  CUSTOMER_DELETE_SUCCESS,
   CUSTOMER_UPDATE_FAIL,
   CUSTOMER_UPDATE_SUCCESS,
-  VISITOR_ADD_SUCCESS,
-  VISITOR_ADD_FAIL,
+  VISITOR_UNKNOWN_ADD_SUCCESS,
+  VISITOR_UNKNOWN_ADD_FAIL,
+  VISITOR_UNKNOWN_UPDATE_SUCCESS,
+  VISITOR_KNOWN_ADD_SUCCESS,
+  VISITOR_KNOWN_ADD_FAIL,
   VISITOR_DELETE_SUCCESS,
   VISITOR_DELETE_FAIL,
-  MAKE_PHOTO_SUCCESS,
-  MAKE_PHOTO_FAIL,
   RESET_ADD_FORM,
   STATS,
   FETCH_CUSTOMERS,
   FETCH_CUSTOMER
 } from "../actions/types";
 
-
 export default function(
   state = {
     customers: [],
-    visitor_add: [],
+    visitors: [],
     customer_add: "none",
     customer_update: "none",
-    visitor_delete: "none",
-    photo_make: "none",
-    photo_upload: "none",
+    visitor_add: "none",
     stats: ["0", "0"]
   },
   action
@@ -43,45 +41,58 @@ export default function(
       return { ...state, authenticated: false };
     case AUTH_ERROR:
       return { ...state, error: action.payload };
+
     case FETCH_LOGS:
       return { ...state, logs: action.payload };
+
     case FETCH_VISITORS:
       return { ...state, visitors: action.payload };
+
     case CUSTOMER_ADD_SUCCESS:
-      return { ...state, customer_add: action.payload };
+      let parray = state.customers || [];
+      parray.push(action.payload);
+      return { ...state, customers: parray };
     case CUSTOMER_ADD_FAIL:
       return { ...state, customer_add: action.payload };
+
     case CUSTOMER_UPDATE_SUCCESS:
-      return { ...state, customer_update: action.payload };
+      let uarray = state.customers || [];
+      uarray[action.payload.index] = action.payload;
+      return { ...state, customers: uarray };
     case CUSTOMER_UPDATE_FAIL:
       return { ...state, customer_update: action.payload };
-    case VISITOR_ADD_SUCCESS:
-      const {name, confidence, image} = action.payload
-      let payload = {}
-      let array = state.visitor_add || []
-      payload.name = action.payload.name
-      payload.confidence = action.payload.confidence
-      payload.image =  "data:image/png;base64," + action.payload.image; 
-      array.push(payload)
-      return { ...state, visitor_add: array };
-    case VISITOR_ADD_FAIL:
+
+    case VISITOR_UNKNOWN_ADD_SUCCESS:
+      let array = state.visitors || [];
+      array.push(action.payload);
+      return { ...state, visitors: array };
+    case VISITOR_UNKNOWN_ADD_FAIL:
       return { ...state, visitor_add: action.payload };
+
+    case VISITOR_UNKNOWN_UPDATE_SUCCESS:
+        let varray = state.visitors || [];
+        let prop = varray.map((prop,key) => {
+          if (prop.name === action.payload.name)
+            prop.name = action.payload.id
+          return prop
+        })
+        return { ...state, visitors: prop };
+
+    case VISITOR_KNOWN_ADD_SUCCESS:
+      let carray = state.visitors || [];
+      carray.push(action.payload);
+      return { ...state, visitors: carray };
+    case VISITOR_KNOWN_ADD_FAIL:
+      return { ...state, visitor_add: action.payload };
+
     case VISITOR_DELETE_SUCCESS:
       return { ...state, visitor_delete: action.payload };
     case VISITOR_DELETE_FAIL:
       return { ...state, visitor_delete: action.payload };
-    case MAKE_PHOTO_SUCCESS:
-      return { ...state, photo_make: action.payload };
-    case MAKE_PHOTO_FAIL:
-      return { ...state, photo_make: action.payload };
-    case UPLOAD_DOCUMENT_SUCCESS:
-      return { ...state, photo_upload: action.payload };
-    case UPLOAD_DOCUMENT_FAIL:
-      return { ...state, photo_upload: action.payload };
+
     case RESET_ADD_FORM:
       return {
         ...state,
-        visitor_add: "none",
         photo_make: "none",
         photo_upload: "none"
       };
@@ -90,7 +101,7 @@ export default function(
     case FETCH_CUSTOMERS:
       return { ...state, customers: action.payload };
     case FETCH_CUSTOMER: {
-      const faces = state.customers.map((item, index) => {
+      const face = state.customers.map((item, index) => {
         if (item.customer) {
           if (item.customer.id === action.payload.customer.id) {
             item.customer = action.payload.customer;
@@ -99,7 +110,7 @@ export default function(
         }
         return item;
       });
-      return { ...state, customers: faces };
+      return { ...state, customer: face };
     }
     default:
       return state;

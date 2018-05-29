@@ -88,7 +88,7 @@ class Dashboard extends React.Component {
     };
   }
   componentWillMount() {
-    this.props.fetchCustomers();
+    // this.props.fetchCustomers();
   }
   handleChange = (event, value) => {
     this.setState({ value });
