@@ -39,7 +39,8 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
-    const ws = new Sockette("wss://api.exception34.com/control", {
+    //const ws = new Sockette("wss://api.exception34.com/control", {
+    const ws = new Sockette("ws://control:1880/control", {
       timeout: 5e3,
       maxAttempts: 10,
       onopen: e => console.log("Connected!"),
