@@ -5,6 +5,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
+import SweetAlert from "react-bootstrap-sweetalert";
 
 // redux
 import { connect } from "react-redux";
@@ -13,10 +14,15 @@ import * as actions from "../actions";
 // material-ui components
 import withStyles from "material-ui/styles/withStyles";
 
+import CameraPage from "views/Camera/Camera.jsx";
+
+import AddAlert from "@material-ui/icons/AddAlert";
+
 // core components
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
+import Snackbar from "components/Snackbar/Snackbar.jsx";
 
 import dashboardRoutes from "routes/dashboard.jsx";
 
@@ -25,73 +31,122 @@ import appStyle from "assets/jss/material-dashboard-pro-react/layouts/dashboardS
 import image from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/logo-white.svg";
 
-const switchRoutes = (
-  <Switch>
-    {dashboardRoutes.map((prop, key) => {
-      if (prop.redirect)
-        return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
-      if (prop.collapse)
-        return prop.views.map((prop, key) => {
-          return (
-            <Route path={prop.path} component={prop.component} key={key} />
-          );
-        });
-      return <Route path={prop.path} component={prop.component} key={key} />;
-    })}
-  </Switch>
-);
+import Sockette from "sockette";
 
 var ps;
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-    this.socket = new WebSocket("ws://exception34.com:1880/control");
-    this.props.addSocketToState(this.socket);
+
+    const ws = new Sockette("wss://api.exception34.com/control", {
+      timeout: 5e3,
+      maxAttempts: 10,
+      onopen: e => console.log("Connected!"),
+      onmessage: ev => {
+        console.log("Received:", ev);
+        let e = JSON.parse(ev.data);
+        if (e.action === "add_unknown") this._socketUnknownFace(e);
+        if (e.action === "add_known") this._socketKnownFace(e);
+        if (e.action === "delete") this._socketReload(e);
+        if (e.action === "add") this._socketUpdate(e);
+        if (e.action === "hello") this._socketFetchCameras();
+      },
+      onreconnect: e => console.log("Reconnecting..."),
+      onmaximum: e => console.log("Stop Attempting!"),
+      onclose: e => console.log("Closed!"),
+      onerror: e => console.log("Error:", e)
+    });
+    this.props.addSocketToState(ws);
+
     this.state = {
       mobileOpen: false,
-      miniActive: true,
-      customer_24: 0
+      miniActive: false,
+      customer_24: 0,
+      views: [],
+      tl: false,
+      message: ""
     };
   }
+
   componentWillMount() {
     console.log("layout:dashboard:willMount");
-    this.socket.onmessage = event => {
-      console.log("event")
-      event = JSON.parse(event.data)
-      if (event.action === 'add_unknown')
-        this._socketUnknownFace(event)
-      if (event.action === 'add_known')
-        this._socketKnownFace(event)
-      if (event.action === 'delete')
-        this._socketReload(event)
-      if (event.action === 'add')
-        this._socketUpdate(event)
-    }
-    // this.socket.on("reload", stats => this._socketReload(stats));
-    // this.socket.on("update", id => this._socketUpdate(id));
-    // this.socket.on("face", face => this._socketFace(face));
-    //    this.socket.on('edit', (id) => this._socketEdit(id))
-    this.props.fetchCustomers()
+    this.props.fetchCustomers();
+    this.props.fetchVisitors();
+    this.props.fetchCameras();
   }
+
   _socketReload(stats) {
     console.log("reload!!!");
     console.log(stats);
 
     this.props.loadStats(stats);
     this.props.fetchCustomers();
+    this.props.fetchCameras();
+    this.props.fetchVisitors();
   }
+
   _socketUpdate(face) {
     console.log("upload visitor!!!");
-    this.props.updateUnknownVisitor(face);
+    // this.props.updateUnknownVisitor(face);
+    this.props.fetchVisitors();
   }
-    _socketUnknownFace(face) {
+
+  _socketFetchCameras(props) {
+    console.log("camera");
+    // this.props.updateUnknownVisitor(face);
+    this.props.fetchCameras(props);
+  }
+  _socketUnknownFace(face) {
     console.log("new  face!!!");
-    this.props.addUnknownVisitor(face)
+    //this.props.addUnknownVisitor(face)
+    this.props.fetchVisitors();
   }
-    _socketKnownFace(face) {
+  _socketKnownFace(face) {
     console.log("known  face!!!");
-    this.props.addKnownVisitor(face)
+    //this.props.addKnownVisitor(face)
+    this.props.fetchVisitors();
+console.log(face)
+    const store = this.props.state;
+
+
+        let customer = undefined;
+
+        store.face.customers.map((v, i) => {
+                   if (v.id === face.name) customer = v;
+                 });
+
+          let image = "data:image/png;base64," + face.image
+
+          if (customer) {
+                    if (customer.treatment === "1") {
+                      let message = (<div>
+                        <img alt="no photo" src={image} height="48" width="48" /> Alert!!!<br/>
+                        {customer.firstname} {customer.lastname} was spotted
+                        <br/>on Camera: {face.camera}
+                        </div>
+                        )
+                      this.setState({message: message})
+                      this.showNotification("tl")
+                    }
+                  }
+
+
+  }
+
+  showNotification = (place) => {
+    if(!this.state[place]){
+      var x = [];
+      x[place] = true;
+      this.setState(x);
+      setTimeout(
+        function() {
+          x[place] = false;
+          this.setState(x);
+        }.bind(this),
+        20000
+      );
+    }
   }
 
   handleDrawerToggle = () => {
@@ -117,7 +172,6 @@ class Dashboard extends React.Component {
     if (navigator.platform.indexOf("Win") > -1) {
       ps.destroy();
     }
-    this.socket.close();
     this.props.addSocketToState(null);
   }
   componentDidUpdate(e) {
@@ -126,11 +180,48 @@ class Dashboard extends React.Component {
       this.refs.mainPanel.scrollTop = 0;
     }
   }
+
   sidebarMinimize() {
     this.setState({ miniActive: !this.state.miniActive });
   }
+
   render() {
     const { classes, ...rest } = this.props;
+
+    dashboardRoutes.map((prop, key) => {
+      if (prop.collapse) {
+        let array = this.props.state.face.cameras.map((prop, idx) => {
+          let camera_name = prop.name ? prop.name : prop.hostname;
+          return {
+            path: "/app/camera/" + idx,
+            name: camera_name,
+            mini: "C",
+            component: CameraPage
+          };
+        });
+
+        prop.views = array;
+      }
+    });
+
+    const switchRoutes = (
+      <Switch>
+        {dashboardRoutes.map((prop, key) => {
+          if (prop.redirect)
+            return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
+          if (prop.collapse)
+            return prop.views.map((prop, key) => {
+              return (
+                <Route path={prop.path} component={prop.component} key={key} />
+              );
+            });
+          return (
+            <Route path={prop.path} component={prop.component} key={key} />
+          );
+        })}
+      </Switch>
+    );
+
     const mainPanel =
       classes.mainPanel +
       " " +
@@ -141,15 +232,25 @@ class Dashboard extends React.Component {
       });
     return (
       <div className={classes.wrapper}>
+        <Snackbar
+                                place="tl"
+                                color="danger"
+                                icon={AddAlert}
+                                message={this.state.message}
+                                open={this.state.tl}
+                                closeNotification={() => this.setState({ tl: false })}
+                                close
+                              />
+
         <Sidebar
           routes={dashboardRoutes}
           logoText={"Face"}
           logo={logo}
-          image={image}
+          //image={image}
           handleDrawerToggle={this.handleDrawerToggle}
           open={this.state.mobileOpen}
           color="purple"
-          bgColor="black"
+          bgColor="white"
           miniActive={this.state.miniActive}
           {...rest}
         />

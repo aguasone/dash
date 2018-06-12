@@ -54,6 +54,8 @@ class CustomersTable extends React.Component {
       emailState: "",
       firstname: "",
       firstnameState: "",
+      notes: "",
+      notesState: "",
       lastname: "",
       lastnameState: "",
       treatment: "",
@@ -127,6 +129,7 @@ class CustomersTable extends React.Component {
       newCustomer.date = customer.date;
       newCustomer.age = this.state.age || "";
       newCustomer.id = customer.id;
+      newCustomer.notes = this.state.notes;
 
       this.props.updateCustomer(newCustomer, this.state.customer_index);
 
@@ -236,6 +239,7 @@ class CustomersTable extends React.Component {
       customer_index: index,
       image: "data:image/png;base64," + customer.photo,
       firstname: customer.firstname,
+      notes: customer.notes,
       lastname: customer.lastname,
       treatment: customer.treatment,
       email: customer.email,
@@ -266,7 +270,7 @@ class CustomersTable extends React.Component {
                 <div className="actions-right">
                   <Button color="success" customClass={classes.actionButton} key="1"
                   onClick={() => {
-                              this.handleClickOpen(0)
+                              this.handleClickOpen(key)
                                             }}>
                             <Edit className={classes.icon} />
                   </Button>
@@ -432,7 +436,7 @@ class CustomersTable extends React.Component {
                 >
                   <Instruction
                     title="Comments:"
-                    text={<span>Good Customer</span>}
+                    text={<span>{this.state.notes}</span>}
                     image={this.state.image}
                     className={classes.instructionNoticeModal}
                     imageClassName={classes.imageNoticeModal}

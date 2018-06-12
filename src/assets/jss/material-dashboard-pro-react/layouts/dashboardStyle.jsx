@@ -9,6 +9,8 @@ import {
   containerFluid
 } from "assets/jss/material-dashboard-pro-react.jsx";
 
+import buttonStyle from "assets/jss/material-dashboard-pro-react/components/buttonStyle.jsx";
+
 const appStyle = theme => ({
   wrapper: {
     position: "relative",
@@ -20,6 +22,22 @@ const appStyle = theme => ({
       content: '" "'
     }
   },
+  cardTitle: {
+    marginTop: "0",
+    marginBottom: "3px",
+    color: "#3C4858",
+    fontSize: "18px"
+  },
+  center: {
+    textAlign: "center"
+  },
+  right: {
+    textAlign: "right"
+  },
+  left: {
+    textAlign: "left"
+  },
+  ...buttonStyle,
   mainPanel: {
     transitionProperty: "top, bottom, width",
     transitionDuration: ".2s, .2s, .35s",
@@ -55,3 +73,4 @@ const appStyle = theme => ({
 });
 
 export default appStyle;
+

@@ -2,10 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
-import { PersistGate } from "redux-persist/lib/integration/react";
+//import { PersistGate } from "redux-persist/lib/integration/react";
 
 // import the two exports from the last code snippet.
-import { persistor, store } from "./store";
+//import { persistor, store } from "./store";
+import { store } from "./store";
 
 import { createBrowserHistory } from "history";
 import { Router, Route, Switch } from "react-router-dom";
@@ -33,10 +34,12 @@ if (token) {
 //window.theStore = store;
 
 const hist = createBrowserHistory();
-
+// <PersistGate loading={null} persistor={persistor}>
+//  </PersistGate>
+//
 ReactDOM.render(
   <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
+
       <Router history={hist}>
         <Switch>
           {indexRoutes.map((prop, key) => {
@@ -46,7 +49,7 @@ ReactDOM.render(
           })}
         </Switch>
       </Router>
-    </PersistGate>
+
   </Provider>,
   document.getElementById("root")
 );

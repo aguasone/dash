@@ -1,4 +1,6 @@
 import axios from "axios";
+import Sockette from "sockette"
+
 
 import {
     AUTH_USER,
@@ -15,11 +17,22 @@ import {
     CUSTOMER_DELETE_SUCCESS,
     CUSTOMER_UPDATE_FAIL,
     CUSTOMER_UPDATE_SUCCESS,
+    VISITOR_ADD_SUCCESS,
+    VISITOR_ADD_FAIL,
     VISITOR_KNOWN_ADD_SUCCESS,
     VISITOR_UNKNOWN_ADD_SUCCESS,
     VISITOR_UNKNOWN_UPDATE_SUCCESS,
     VISITOR_DELETE_FAIL,
     VISITOR_DELETE_SUCCESS,
+
+    CAMERA_ADD_SUCCESS,
+    CAMERA_ADD_FAIL,
+    CAMERA_DELETE_SUCCESS,
+    CAMERA_DELETE_FAIL,
+    CAMERA_UPDATE_SUCCESS,
+    CAMERA_UPDATE_FAIL,
+
+    FETCH_CAMERAS,
 
     RESET_ADD_FORM,
     STATS,
@@ -27,12 +40,19 @@ import {
     FETCH_CUSTOMER
 } from "./types.js";
 
-//const io = require('socket.io-client')
-//const socket = io('https://www.exception34.com', {secure: true})
-const socket = new WebSocket("ws://exception34.com:1880/control");
+// Message when not connected!!
+const socket = new Sockette('wss://api.exception34.com/control', {
+      timeout: 500,
+      maxAttempts: 10,
+      onopen: e => console.log('Connected!'),
+      onreconnect: e => console.log('Reconnecting...'),
+      onmaximum: e => console.log('Stop Attempting!'),
+      onclose: e => console.log('Closed!'),
+      onerror: e => console.log('Error:', e)
+    });
 
-const ROOT_URL = "https://exception34.com:3001/api";
-const ROOT_URL2 = "https://exception34.com:3001/api";
+const ROOT_URL = "https://exception34.com/apis";
+const ROOT_URL2 = "https://exception34.com/apis";
 
 export function signinUser({ email, password }) {
     return function(dispatch) {
@@ -113,7 +133,7 @@ export function fetchLogs() {
 export function fetchVisitors() {
     return function(dispatch) {
         axios
-            .get(`${ROOT_URL2}/visitors`, {
+            .get(`${ROOT_URL2}/visitors?filter[order]=date%20DESC&filter[limit]=20`, {
                 headers: { authorization: localStorage.getItem("token") }
             })
             .then(response => {
@@ -244,34 +264,56 @@ export function addUnknownVisitor(result) {
 
 export function updateUnknownVisitor(result) {
     return function(dispatch) {
-        dispatch({
-            type: VISITOR_UNKNOWN_UPDATE_SUCCESS,
-            payload: result
-        });
+        axios
+            .post(`${ROOT_URL2}/visitors`, result)
+            .then(response => {
+                console.log("Response", response);
+                dispatch({
+                    type: VISITOR_ADD_SUCCESS,
+                    payload: response.data
+                });
+                console.log("Visitor added");
+            })
+            .catch(response => {
+                dispatch({
+                    type: VISITOR_ADD_FAIL,
+                    payload: "fail"
+                });
+                console.log("Can't add a visitor");
+            });
+        // dispatch({
+        //     type: VISITOR_UNKNOWN_UPDATE_SUCCESS,
+        //     payload: result
+        // });
         console.log("Update Visitor success");
     };
 }
 
 export function addKnownVisitor(result) {
     return function(dispatch) {
-        axios
-            .get(`${ROOT_URL2}/customers/${result.name}`, {
-                headers: { authorization: localStorage.getItem("token") }
-            })
-            .then(response => {
                 dispatch({
-                    type: VISITOR_KNOWN_ADD_SUCCESS,
+                    type: VISITOR_ADD_SUCCESS,
                     payload: result
                 });
-                console.log("Add Visitor success");
-            });
+                console.log("Visitor added");
+            }
+        // axios
+        //     .get(`${ROOT_URL2}/customers/${result.name}`, {
+        //         headers: { authorization: localStorage.getItem("token") }
+        //     })
+        //     .then(response => {
+        //         dispatch({
+        //             type: VISITOR_KNOWN_ADD_SUCCESS,
+        //             payload: result
+        //         });
+        //         console.log("Add Visitor success");
+        //     });
     };
-}
 
-export function addCustomer(size, index) {
+export function addCustomer(props, index) {
     return function(dispatch) {
         axios
-            .post(`${ROOT_URL2}/customers`, size)
+            .post(`${ROOT_URL2}/customers`, props)
             .then(response => {
                 console.log("Response", response);
                 response.data.index = index;
@@ -280,7 +322,8 @@ export function addCustomer(size, index) {
                     payload: response.data
                 });
                 response.data.action = "add"
-                response.data.oldName = size.name
+                response.data.oldName = props.name
+                response.data.session = props.hostname
                 socket.send(JSON.stringify(response.data));
                 console.log("Customer added");
             })
@@ -294,22 +337,38 @@ export function addCustomer(size, index) {
     };
 }
 
-export function updateCustomer(size, index) {
+export function fetchCameras() {
+    return function(dispatch) {
+            //axios.get(`${ROOT_URL2}/faces?filter[include]=photos&filter[where][photoId][neq]=&filter[order]=date%20DESC&filter[limit]=20`, {
+            axios
+                .get(`${ROOT_URL2}/cameras`, {
+                    headers: { authorization: localStorage.getItem("token") }
+                })
+                .then(response => {
+                    dispatch({
+                        type: FETCH_CAMERAS,
+                        payload: response.data
+                    });
+                });
+        };
+}
+
+export function updateCustomer(props, index) {
     return function(dispatch) {
         axios
-            .patch(`${ROOT_URL2}/customers/${size.id}`, {
-                date: size.date,
-                firstname: size.firstname,
-                lastname: size.lastname,
-                email: size.email,
-                age: size.age,
-                treatment: size.treatment
-                // photo: size.known
+            .patch(`${ROOT_URL2}/customers/${props.id}`, {
+                date: props.date,
+                firstname: props.firstname,
+                lastname: props.lastname,
+                email: props.email,
+                age: props.age,
+                treatment: props.treatment
+                // photo: props.known
             })
             .then(response => {
                 console.log("Response", response);
                 response.data.index = index;
-                socket.send('{"action":"update","id":"'+size.id+'"}'); //, size.emitId);
+                socket.send('{"action":"update","id":"'+props.id+'"}'); //, props.emitId);
                 dispatch({
                     type: CUSTOMER_UPDATE_SUCCESS,
                     payload: response.data
@@ -334,7 +393,7 @@ export function deleteCustomer(prop) {
             })
             .then(response => {
                 console.log("Response", response);
-                socket.send('{"action":"delete","id":"'+prop.id+'","firstname":"'+prop.firstname+'","lastname":"'+prop.lastname+'"}'); //, size.emitId);
+                socket.send('{"action":"delete","id":"'+prop.id+'","firstname":"'+prop.firstname+'","lastname":"'+prop.lastname+'"}'); //, props.emitId);
                 dispatch({
                     type: CUSTOMER_DELETE_SUCCESS,
                     payload: prop.id
@@ -350,3 +409,66 @@ export function deleteCustomer(prop) {
             });
     };
 }
+
+export function deleteCamera(prop) {
+    return function(dispatch) {
+        axios
+            .delete(`${ROOT_URL2}/cameras/${prop.id}`, {
+                headers: { authorization: localStorage.getItem("token") }
+            })
+            .then(response => {
+                console.log("Response", response);
+                socket.send('{"action":"delete","id":"'+prop.id+'","firstname":"'+prop.firstname+'","lastname":"'+prop.lastname+'"}'); //, props.emitId);
+                dispatch({
+                    type: CAMERA_DELETE_SUCCESS,
+                    payload: prop.id
+                });
+                console.log("Camera deleted");
+            })
+            .catch(response => {
+                dispatch({
+                    type: CAMERA_DELETE_FAIL,
+                    payload: "fail"
+                });
+                console.log("Can't delete camera");
+            });
+    };
+}
+
+export function updateCamera(props, index) {
+    return function(dispatch) {
+        axios
+            .patch(`${ROOT_URL2}/cameras/${props.id}`, props)
+            .then(response => {
+                console.log("Response", response);
+                socket.send('{"action":"feed","id":"'+props.hostname+'","value":"'+ props.url +'"}');
+                response.data.index = index;
+                dispatch({
+                    type: CAMERA_UPDATE_SUCCESS,
+                    payload: response.data
+                });
+                console.log("Camera updated");
+            })
+            .catch(response => {
+                dispatch({
+                    type: CAMERA_UPDATE_FAIL,
+                    payload: "fail"
+                });
+                console.log("Can't update a camera");
+            });
+    };
+}
+
+export function optionsCamera(props, index) {
+    return function(dispatch) {
+
+                socket.send('{"action": "'+ props.action +'","id":"'+props.hostname+'","value":"'+ props.value +'"}');
+                props.index = index;
+                dispatch({
+                    type: CAMERA_UPDATE_SUCCESS,
+                    payload: props
+                });
+                console.log("Camera options updated");
+    };
+}
+

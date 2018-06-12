@@ -19,11 +19,21 @@ export const CUSTOMER_UPDATE_SUCCESS = 'customer_update_success';
 export const CUSTOMER_UPDATE_FAIL = 'customer_update_fail';
 export const CUSTOMER_EDIT = 'customer_edit';
 
+export const VISITOR_ADD_SUCCESS = 'visitor_add_success';
+export const VISITOR_ADD_FAIL = 'visitor_add_fail';
 export const VISITOR_KNOWN_ADD_SUCCESS = 'visitor_known_add_success';
 export const VISITOR_KNOWN_ADD_FAIL = 'visitor_known_add_fail';
 export const VISITOR_UNKNOWN_ADD_SUCCESS = 'visitor_unknown_add_success';
 export const VISITOR_UNKNOWN_ADD_FAIL = 'visitor_unknown_add_fail';
 export const VISITOR_UNKNOWN_UPDATE_SUCCESS = 'visitor_unknown_update_success';
+
+export const CAMERA_DELETE_SUCCESS = 'camera_delete_success';
+export const CAMERA_DELETE_FAIL = 'camera_delete_fail';
+export const CAMERA_UPDATE_SUCCESS = 'camera_update_success';
+export const CAMERA_UPDATE_FAIL = 'camera_update_fail';
+export const CAMERA_ADD_SUCCESS = 'camera_add_success';
+export const CAMERA_ADD_FAIL = 'camera_add_fail';
+export const FETCH_CAMERAS = 'fetch_cameras';
 
 
 export const VISITOR_DELETE_SUCCESS = 'visitor_delete_success';

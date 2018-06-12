@@ -1,8 +1,8 @@
 // src/store/index.js
 
 import { compose, createStore, applyMiddleware } from "redux";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+//import { persistStore, persistReducer } from "redux-persist";
+//import storage from "redux-persist/lib/storage";
 
 import reduxThunk from "redux-thunk";
 import { createLogger } from 'redux-logger'
@@ -20,13 +20,14 @@ const configureStore = composeEnhancers(
   applyMiddleware(...middleware),
 )(createStore)
 
-const persistConfig = {
-  key: "root",
-  storage: storage,
-  blacklist: ['socket']
+// const persistConfig = {
+//   key: "root",
+//   storage: storage,
+//   blacklist: ['socket']
 
-};
-const persistReducer2 = persistReducer(persistConfig, rootReducer);
+// };
+// const persistReducer2 = persistReducer(persistConfig, rootReducer);
 
-export const store = configureStore(persistReducer2);
-export const persistor = persistStore(store);
+export const store = configureStore(rootReducer);
+//export const store = configureStore(persistReducer2);
+//export const persistor = persistStore(store);

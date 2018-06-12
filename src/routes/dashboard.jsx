@@ -4,10 +4,12 @@ import TimelinePage from 'views/Pages/Timeline.jsx'
 import UserProfile from 'views/Pages/UserProfile.jsx'
 import VisitorProfile from 'views/Pages/VisitorProfile.jsx'
 
+
 // import TempPage from 'views/Components/Notifications.jsx'
  import TempPage from 'views/Forms/ExtendedForms.jsx'
 import CustomersPage from 'views/Pages/CustomersTable.jsx'
 
+import { store } from "../store";
 
 // @material-ui/icons
 import DashboardIcon from '@material-ui/icons/Dashboard'
@@ -39,10 +41,19 @@ var dashRoutes = [
     component: CustomersPage
   },
   {
-    path: '/app/camera',
-    name: 'Camera Page',
+    path: '/app/camera/:id',
+    name: 'Camera',
     icon: Image,
-    component: CameraPage
+    component: CameraPage,
+    hide: true
+  },
+  {
+    collapse: true,
+    path: "/app/camera",
+    name: "Cameras",
+    state: "openComponents",
+    icon: Image,
+    views: []
   },
   {
     path: '/app/user-page/:id',
