@@ -36,7 +36,7 @@ var dashRoutes = [
   // },
   {
     path: '/app/temp',
-    name: 'Customers Page',
+    name: 'Customers',
     icon: Image,
     component: CustomersPage
   },

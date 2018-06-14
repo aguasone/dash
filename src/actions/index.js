@@ -369,7 +369,7 @@ export function updateCustomer(props, index) {
             .then(response => {
                 console.log("Response", response);
                 response.data.index = index;
-                socket.send('{"action":"update","id":"'+props.id+'"}'); //, props.emitId);
+                socket.send('{"action":"update","id":"'+props.id+'", "firstname":"'+props.firstname+'", "lastname":"'+props.lastname+'"}'); //, props.emitId);
                 dispatch({
                     type: CUSTOMER_UPDATE_SUCCESS,
                     payload: response.data
@@ -442,7 +442,7 @@ export function updateCamera(props, index) {
             .patch(`${ROOT_URL2}/cameras/${props.id}`, props)
             .then(response => {
                 console.log("Response", response);
-                socket.send('{"action":"feed","id":"'+props.hostname+'","value":"'+ props.url +'"}');
+                socket.send('{"action":"feed","id":"'+props.hostname+'","url":"'+ props.url +'","name":"'+ props.name +'"}');
                 response.data.index = index;
                 dispatch({
                     type: CAMERA_UPDATE_SUCCESS,

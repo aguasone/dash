@@ -505,6 +505,21 @@ class CustomersTable extends React.Component {
                             />
                           </ItemGrid>
                         </GridContainer>
+                        <GridContainer>
+                          <ItemGrid xs={12} sm={12} md={12}>
+                            <CustomInput
+                              labelText={<span>Notes</span>}
+                              id="notes"
+                              formControlProps={{
+                                fullWidth: true
+                              }}
+                              inputProps={{
+                                value: `${this.state.notes}`,
+                                onChange: event => this.change(event, "notes", "notes")
+                              }}
+                            />
+                          </ItemGrid>
+                        </GridContainer>
                         {treatment}
                       </div>
                     }
