@@ -101,7 +101,7 @@ class CameraPage extends React.Component {
         location: ""
       });
     // this.socket = new WebSocket("wss://api.exception34.com/feed_out");
-    this.socket = new WebSocket("ws://control:1880/feed_out");
+    this.socket = new WebSocket("wss://exception34.com:1880/feed_out");
   }
 
   componentDidMount() {
