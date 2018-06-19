@@ -42,7 +42,7 @@ import {
 
 // Message when not connected!!
 //const socket = new Sockette('wss://api.exception34.com/control', {
-const socket = new Sockette('wss://exception34.com:1880/control', {
+const socket = new Sockette('wss://gitlab.exception34.com/control', {
       timeout: 500,
       maxAttempts: 10,
       onopen: e => console.log('Connected!'),
@@ -52,8 +52,8 @@ const socket = new Sockette('wss://exception34.com:1880/control', {
       onerror: e => console.log('Error:', e)
     });
 
-const ROOT_URL = "https://exception34.com:3001/api";
-const ROOT_URL2 = "https://exception34.com:3001/api";
+const ROOT_URL = "https://api.exception34.com:3001/api";
+const ROOT_URL2 = "https://api.exception34.com:3001/api";
 
 export function signinUser({ email, password }) {
     return function(dispatch) {

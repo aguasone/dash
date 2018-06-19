@@ -101,7 +101,7 @@ class CameraPage extends React.Component {
         location: ""
       });
     // this.socket = new WebSocket("wss://api.exception34.com/feed_out");
-    this.socket = new WebSocket("wss://exception34.com:1880/feed_out");
+    this.socket = new WebSocket("wss://gitlab.exception34.com/feed_out");
   }
 
   componentDidMount() {
@@ -460,7 +460,7 @@ class CameraPage extends React.Component {
       </GridContainer>
     );
 
-    let localFeed = "http://localhost:" + this.state.camera.port + "/feed";
+    let localFeed = "http://exception34.com:" + this.state.camera.port + "/feed";
 
     imageFeed = <img alt="feed is offline" src={localFeed} />;
 
