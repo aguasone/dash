@@ -52,8 +52,8 @@ const socket = new Sockette('wss://gitlab.exception34.com/control', {
       onerror: e => console.log('Error:', e)
     });
 
-const ROOT_URL = "https://api.exception34.com:3001/api";
-const ROOT_URL2 = "https://api.exception34.com:3001/api";
+const ROOT_URL = "https://api.exception34.com/api";
+const ROOT_URL2 = "https://api.exception34.com/api";
 
 export function signinUser({ email, password }) {
     return function(dispatch) {
