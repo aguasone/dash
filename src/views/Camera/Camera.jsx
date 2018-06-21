@@ -460,7 +460,7 @@ class CameraPage extends React.Component {
       </GridContainer>
     );
 
-    let localFeed = "http://exception34.com:" + this.state.camera.port + "/feed";
+    let localFeed = "https://exception34.com:" + this.state.camera.port + "/feed";
 
     imageFeed = <img alt="feed is offline" src={localFeed} />;
 
