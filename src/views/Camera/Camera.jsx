@@ -100,8 +100,9 @@ class CameraPage extends React.Component {
         url: "rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov",
         location: ""
       });
-    // this.socket = new WebSocket("wss://api.exception34.com/feed_out");
-    this.socket = new WebSocket("wss://gitlab.exception34.com/feed_out");
+     this.socket = new WebSocket("wss://exception34.com/feed_out");
+    //this.socket = new WebSocket("wss://exception34.com/node-red/feed_out");
+    //this.socket = new WebSocket("ws://localhost:1880/feed_out");
   }
 
   componentDidMount() {
@@ -119,50 +120,51 @@ class CameraPage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     console.log("props");
-    console.log(this.props.match.params.id);
-    console.log(nextProps.match.params.id);
+    //console.log(this.props.match.params.id);
+    //console.log(nextProps.match.params.id);
     // if (this.props.match.params.id != nextProps.match.params.id)
     const camera = this.props.state.face.cameras[nextProps.match.params.id];
 
-    if (!camera)
+    if (camera) {
+      if (this.props.match.params.id != nextProps.match.params.id)
+        this.setState({
+          camera: camera,
+          name: camera.name ? camera.name : "",
+          location: camera.location ? camera.location : "",
+          url: camera.url
+            ? camera.url
+            : "rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov",
+          optionSizeCamera: camera.optionSizeCamera
+            ? camera.optionSizeCamera
+            : "600",
+          optionDebugCamera: camera.optionDebugCamera
+            ? camera.optionDebugCamera
+            : false
+        });
+      //if (this.props.match.params.id != nextProps.match.params.id)
+      else
+        this.setState({
+          camera: camera,
+          name: this.state.name,
+          location: this.state.location,
+          url: this.state.url,
+          optionSizeCamera: this.state.optionSizeCamera,
+          optionDebugCamera: this.state.optionDebugCamera
+        });
+    } else
       this.setState({
-        camera: "",
+        camera: [],
         name: "",
         location: "",
         url: "rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov",
-        optionSizeCamera: "600",
+        optionSizeCamera: 600,
         optionDebugCamera: false
       });
-    //if (this.props.match.params.id != nextProps.match.params.id)
-    else
-      this.setState({
-        camera: camera,
-        name: camera.name ? camera.name : "",
-        location: camera.location ? camera.location : "",
-        url: camera.url
-          ? camera.url
-          : "rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov",
-        optionSizeCamera: camera.optionSizeCamera
-          ? camera.optionSizeCamera
-          : "600",
-        optionDebugCamera: camera.optionDebugCamera
-          ? camera.optionDebugCamera
-          : false
-      });
-    // else
-    //   this.setState({
-    //     camera: camera,
-    //     name: camera.name ? camera.name : "",
-    //     location: camera.location ? camera.location : "",
-    //     url: camera.url
-    //       ? camera.url
-    //       : "rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov"
-    //   });
   }
 
   handleChange = event => {
     let updateCamera = this.state.camera;
-    console.log(event.target);
+    //console.log(event.target);
     switch (event.target.name) {
       case "optionSizeCamera":
         this.setState({ optionSizeCamera: event.target.value });
@@ -201,7 +203,7 @@ class CameraPage extends React.Component {
       newCustomer.treatment = this.state.treatment;
       newCustomer.date = person.customer ? person.customer.date : person.date;
       newCustomer.age = this.state.age || "";
-      newCustomer.photo = person.image;
+      newCustomer.photo = this.state.image;
       newCustomer.id = person.customer ? person.customer.id : undefined;
       newCustomer.name = person.name;
       newCustomer.notes = this.state.notes;
@@ -309,8 +311,8 @@ class CameraPage extends React.Component {
         break;
       case "notes":
         this.setState({
-                    stateName: event.target.value
-                  });
+          stateName: event.target.value
+        });
         break;
       default:
         break;
@@ -333,8 +335,8 @@ class CameraPage extends React.Component {
       type: person.action,
       visitor_index: index,
       image: person.customer
-        ? "data:image/png;base64," + person.customer.photo
-        : "data:image/png;base64," + person.image,
+        ? person.customer.photo
+        : person.image,
       firstname: person.customer ? person.customer.firstname : person.name,
       lastname: person.customer ? person.customer.lastname : "",
       treatment: person.customer ? person.customer.treatment : "0",
@@ -460,7 +462,9 @@ class CameraPage extends React.Component {
       </GridContainer>
     );
 
-    let localFeed = "https://exception34.com:" + this.state.camera.port + "/feed";
+    let localFeed =
+      "https://exception34.com:" + this.state.camera.port + "/feed";
+      //"http://localhost:" + this.state.camera.port + "/feed";
 
     imageFeed = <img alt="feed is offline" src={localFeed} />;
 
@@ -530,15 +534,15 @@ class CameraPage extends React.Component {
                             }}
                           />
                           <div className={classes.staticFormGroup}>
-                           <p className={classes.staticFormControl}>
-                             {"date added: " +
+                            <p className={classes.staticFormControl}>
+                              {"date added: " +
                                 moment(
                                   this.state.camera.date,
                                   "YYYYMMDDHHmmSS"
                                 ).format("DD-MM-YYYY HH:mm:SS")}
-                           </p>
-                         </div>
-                           <div className={classes.staticFormGroup}>
+                            </p>
+                          </div>
+                          <div className={classes.staticFormGroup}>
                             <p className={classes.staticFormControl}>
                               {"port: " + this.state.camera.port}
                             </p>
@@ -804,7 +808,7 @@ class CameraPage extends React.Component {
             <Instruction
               title="Comments:"
               text={<span>{this.state.notes}</span>}
-              image={this.state.image}
+              image={"data:image/png;base64," + this.state.image}
               className={classes.instructionNoticeModal}
               imageClassName={classes.imageNoticeModal}
             />
@@ -882,7 +886,8 @@ class CameraPage extends React.Component {
                         }}
                         inputProps={{
                           value: `${this.state.notes}`,
-                          onChange: event => this.change(event, "notes", "notes")
+                          onChange: event =>
+                            this.change(event, "notes", "notes")
                         }}
                       />
                     </ItemGrid>

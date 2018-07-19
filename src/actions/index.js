@@ -41,10 +41,9 @@ import {
 } from "./types.js";
 
 // Message when not connected!!
-//const socket = new Sockette('wss://api.exception34.com/control', {
-const socket = new Sockette('wss://gitlab.exception34.com/control', {
-      timeout: 500,
-      maxAttempts: 10,
+const socket = new Sockette('wss://exception34.com/control', {
+//const socket = new Sockette('ws://localhost:1880/control', {
+      timeout: 3000,
       onopen: e => console.log('Connected!'),
       onreconnect: e => console.log('Reconnecting...'),
       onmaximum: e => console.log('Stop Attempting!'),
@@ -52,49 +51,49 @@ const socket = new Sockette('wss://gitlab.exception34.com/control', {
       onerror: e => console.log('Error:', e)
     });
 
-const ROOT_URL = "https://api.exception34.com/api";
-const ROOT_URL2 = "https://api.exception34.com/api";
+const ROOT_URL = "https://exception34.com/api";
+//const ROOT_URL = "http://localhost:3001/api";
 
-export function signinUser({ email, password }) {
-    return function(dispatch) {
-        // Submit email/password to the server
-        axios
-            .post(`${ROOT_URL}/signin`, { email, password })
-            .then(response => {
-                // If request is good
-                // - update state to indicate user is authenticated
-                dispatch({ type: AUTH_USER });
-                // - save jwt token and id
-                localStorage.setItem("token", response.data.token);
-                localStorage.setItem("id", response.data.id);
-                // redirect to another route
-                //  browserHistory.push('/');
-            })
-            .catch(() => {
-                // If request bad
-                // - show an error to the user
-                dispatch(authError("Invalid email or password"));
-            });
+// export function signinUser({ email, password }) {
+//     return function(dispatch) {
+//         // Submit email/password to the server
+//         axios
+//             .post(`${ROOT_URL}/signin`, { email, password })
+//             .then(response => {
+//                 // If request is good
+//                 // - update state to indicate user is authenticated
+//                 dispatch({ type: AUTH_USER });
+//                 // - save jwt token and id
+//                 localStorage.setItem("token", response.data.token);
+//                 localStorage.setItem("id", response.data.id);
+//                 // redirect to another route
+//                 //  browserHistory.push('/');
+//             })
+//             .catch(() => {
+//                 // If request bad
+//                 // - show an error to the user
+//                 dispatch(authError("Invalid email or password"));
+//             });
 
-        // If request is successful
-    };
-}
+//         // If request is successful
+//     };
+//}
 
-export function signupUser({ email, password }) {
-    return function(dispatch) {
-        axios
-            .post(`${ROOT_URL}/signup`, { email, password })
-            .then(response => {
-                dispatch({ type: AUTH_USER });
-                localStorage.setItem("token", response.data.token);
-                localStorage.setItem("id", response.data.id);
-                //   browserHistory.push('/');
-            })
-            .catch(response => {
-                dispatch(authError(response.response.data.error));
-            });
-    };
-}
+// export function signupUser({ email, password }) {
+//     return function(dispatch) {
+//         axios
+//             .post(`${ROOT_URL}/signup`, { email, password })
+//             .then(response => {
+//                 dispatch({ type: AUTH_USER });
+//                 localStorage.setItem("token", response.data.token);
+//                 localStorage.setItem("id", response.data.id);
+//                 //   browserHistory.push('/');
+//             })
+//             .catch(response => {
+//                 dispatch(authError(response.response.data.error));
+//             });
+//     };
+// }
 
 export function authError(error) {
     return {
@@ -134,7 +133,7 @@ export function fetchLogs() {
 export function fetchVisitors() {
     return function(dispatch) {
         axios
-            .get(`${ROOT_URL2}/visitors?filter[order]=date%20DESC&filter[limit]=20`, {
+            .get(`${ROOT_URL}/visitors?filter[order]=date%20DESC&filter[limit]=20`, {
                 headers: { authorization: localStorage.getItem("token") }
             })
             .then(response => {
@@ -148,10 +147,10 @@ export function fetchVisitors() {
 
 export function fetchCustomers() {
     return function(dispatch) {
-        //axios.get(`${ROOT_URL2}/faces?filter[include]=photos&filter[where][photoId][neq]=&filter[order]=date%20DESC&filter[limit]=20`, {
-        //axios.get(`${ROOT_URL2}/faces?filter[include]=customer&filter[order]=date%20DESC&filter[limit]=20`, {
+        //axios.get(`${ROOT_URL}/faces?filter[include]=photos&filter[where][photoId][neq]=&filter[order]=date%20DESC&filter[limit]=20`, {
+        //axios.get(`${ROOT_URL}/faces?filter[include]=customer&filter[order]=date%20DESC&filter[limit]=20`, {
         axios
-            .get(`${ROOT_URL2}/customers`, {
+            .get(`${ROOT_URL}/customers`, {
                 headers: { authorization: localStorage.getItem("token") }
             })
             .then(response => {
@@ -165,9 +164,9 @@ export function fetchCustomers() {
 
 export function fetchCustomer(id) {
     return function(dispatch) {
-        //axios.get(`${ROOT_URL2}/faces?filter[include]=photos&filter[where][photoId][neq]=&filter[order]=date%20DESC&filter[limit]=20`, {
+        //axios.get(`${ROOT_URL}/faces?filter[include]=photos&filter[where][photoId][neq]=&filter[order]=date%20DESC&filter[limit]=20`, {
         axios
-            .get(`${ROOT_URL2}/faces/${id}?filter[include]=customer`, {
+            .get(`${ROOT_URL}/faces/${id}?filter[include]=customer`, {
                 headers: { authorization: localStorage.getItem("token") }
             })
             .then(response => {
@@ -266,7 +265,7 @@ export function addUnknownVisitor(result) {
 export function updateUnknownVisitor(result) {
     return function(dispatch) {
         axios
-            .post(`${ROOT_URL2}/visitors`, result)
+            .post(`${ROOT_URL}/visitors`, result)
             .then(response => {
                 console.log("Response", response);
                 dispatch({
@@ -299,7 +298,7 @@ export function addKnownVisitor(result) {
                 console.log("Visitor added");
             }
         // axios
-        //     .get(`${ROOT_URL2}/customers/${result.name}`, {
+        //     .get(`${ROOT_URL}/customers/${result.name}`, {
         //         headers: { authorization: localStorage.getItem("token") }
         //     })
         //     .then(response => {
@@ -314,7 +313,7 @@ export function addKnownVisitor(result) {
 export function addCustomer(props, index) {
     return function(dispatch) {
         axios
-            .post(`${ROOT_URL2}/customers`, props)
+            .post(`${ROOT_URL}/customers`, props)
             .then(response => {
                 console.log("Response", response);
                 response.data.index = index;
@@ -340,9 +339,9 @@ export function addCustomer(props, index) {
 
 export function fetchCameras() {
     return function(dispatch) {
-            //axios.get(`${ROOT_URL2}/faces?filter[include]=photos&filter[where][photoId][neq]=&filter[order]=date%20DESC&filter[limit]=20`, {
+            //axios.get(`${ROOT_URL}/faces?filter[include]=photos&filter[where][photoId][neq]=&filter[order]=date%20DESC&filter[limit]=20`, {
             axios
-                .get(`${ROOT_URL2}/cameras`, {
+                .get(`${ROOT_URL}/cameras`, {
                     headers: { authorization: localStorage.getItem("token") }
                 })
                 .then(response => {
@@ -357,7 +356,7 @@ export function fetchCameras() {
 export function updateCustomer(props, index) {
     return function(dispatch) {
         axios
-            .patch(`${ROOT_URL2}/customers/${props.id}`, {
+            .patch(`${ROOT_URL}/customers/${props.id}`, {
                 date: props.date,
                 firstname: props.firstname,
                 lastname: props.lastname,
@@ -389,7 +388,7 @@ export function updateCustomer(props, index) {
 export function deleteCustomer(prop) {
     return function(dispatch) {
         axios
-            .delete(`${ROOT_URL2}/customers/${prop.id}`, {
+            .delete(`${ROOT_URL}/customers/${prop.id}`, {
                 headers: { authorization: localStorage.getItem("token") }
             })
             .then(response => {
@@ -414,7 +413,7 @@ export function deleteCustomer(prop) {
 export function deleteCamera(prop) {
     return function(dispatch) {
         axios
-            .delete(`${ROOT_URL2}/cameras/${prop.id}`, {
+            .delete(`${ROOT_URL}/cameras/${prop.id}`, {
                 headers: { authorization: localStorage.getItem("token") }
             })
             .then(response => {
@@ -439,7 +438,7 @@ export function deleteCamera(prop) {
 export function updateCamera(props, index) {
     return function(dispatch) {
         axios
-            .patch(`${ROOT_URL2}/cameras/${props.id}`, props)
+            .patch(`${ROOT_URL}/cameras/${props.id}`, props)
             .then(response => {
                 console.log("Response", response);
                 socket.send('{"action":"feed","id":"'+props.hostname+'","url":"'+ props.url +'","name":"'+ props.name +'"}');

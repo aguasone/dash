@@ -11,7 +11,8 @@ import rootReducer from "../reducers"; // the value from combineReducers
 
 const loggerMiddleware = createLogger()
 
-const middleware = [reduxThunk, loggerMiddleware]
+//const middleware = [reduxThunk, loggerMiddleware]
+const middleware = [reduxThunk]
 //const middleware = [reduxThunk]
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

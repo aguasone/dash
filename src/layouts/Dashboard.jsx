@@ -39,13 +39,13 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
-    //const ws = new Sockette("wss://api.exception34.com/control", {
-    const ws = new Sockette("wss://gitlab.exception34.com/control", {
-      timeout: 5e3,
-      maxAttempts: 10,
+    const ws = new Sockette("wss://exception34.com/control", {
+    //const ws = new Sockette("ws://localhost:1880/control", {
+      timeout: 10e3,
+      //maxAttempts: 100,
       onopen: e => console.log("Connected!"),
       onmessage: ev => {
-        console.log("Received:", ev);
+        //console.log("Received:", ev);
         let e = JSON.parse(ev.data);
         if (e.action === "add_unknown") this._socketUnknownFace(e);
         if (e.action === "add_known") this._socketKnownFace(e);
@@ -107,7 +107,7 @@ class Dashboard extends React.Component {
     console.log("known  face!!!");
     //this.props.addKnownVisitor(face)
     this.props.fetchVisitors();
-console.log(face)
+//console.log(face)
     const store = this.props.state;
 
 
