@@ -41,7 +41,7 @@ import {
 } from "./types.js";
 
 // Message when not connected!!
-const socket = new Sockette('wss://exception34.com/control', {
+const socket = new Sockette('wss://exception34.com/node-red/control', {
 //const socket = new Sockette('ws://localhost:1880/control', {
       timeout: 3000,
       onopen: e => console.log('Connected!'),

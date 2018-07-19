@@ -100,7 +100,7 @@ class CameraPage extends React.Component {
         url: "rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov",
         location: ""
       });
-     this.socket = new WebSocket("wss://exception34.com/feed_out");
+     this.socket = new WebSocket("wss://exception34.com/node-red/feed_out");
     //this.socket = new WebSocket("wss://exception34.com/node-red/feed_out");
     //this.socket = new WebSocket("ws://localhost:1880/feed_out");
   }
