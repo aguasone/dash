@@ -41,7 +41,7 @@ import {
 } from "./types.js";
 
 // Message when not connected!!
-const socket = new Sockette('wss://exception34.com/node-red/control', {
+const socket = new Sockette('wss://gitlab.exception34.com/node-red/control', {
 //const socket = new Sockette('ws://localhost:1880/control', {
       timeout: 3000,
       onopen: e => console.log('Connected!'),
@@ -51,7 +51,7 @@ const socket = new Sockette('wss://exception34.com/node-red/control', {
       onerror: e => console.log('Error:', e)
     });
 
-const ROOT_URL = "https://exception34.com/api";
+const ROOT_URL = "https://gitlab.exception34.com/api";
 //const ROOT_URL = "http://localhost:3001/api";
 
 // export function signinUser({ email, password }) {

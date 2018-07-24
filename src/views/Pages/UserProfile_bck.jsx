@@ -131,7 +131,7 @@ class UserProfile extends React.Component {
     let customerDate = moment(customer.date, "YYYYMMDDHHmmSS").format(
       "DD-MM-YYYY HH:mm:ss"
     );
-    let photo = "https://www.exception34.com/photo/";
+    let photo = "https://www.gitlab.exception34.com/photo/";
     let faceDetected = photo + customer.image_processed;
     let avatar = photo + customer.image_processed;
     let faceKnown;
@@ -163,7 +163,7 @@ class UserProfile extends React.Component {
       const { classes } = this.props;
       let faces = store.face.customers.map((item, index) => {
         let since = moment(item.date, "YYYYMMDDHHmmSS").fromNow();
-        let photo = "https://www.exception34.com/photo/";
+        let photo = "https://www.gitlab.exception34.com/photo/";
 
         let faceDetected = photo + item.image_processed;
         let faceKnown;

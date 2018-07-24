@@ -122,7 +122,7 @@ class TimelinePage extends React.Component {
         //let itemDate = moment(item.date, 'YYYYMMDDHHmmSS').format('DD-MM-YYYY HH:mm:ss')
 
         var titleColor = colors[Math.floor(Math.random() * colors.length)];
-        let photo = "https://www.exception34.com/photo/";
+        let photo = "https://www.gitlab.exception34.com/photo/";
 
         let faceDetected = photo + item.image_processed;
         let faceKnown;

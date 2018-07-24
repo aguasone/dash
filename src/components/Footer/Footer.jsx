@@ -44,7 +44,7 @@ function Footer({ ...props }) {
         </div>
         <p className={classes.right}>
           &copy; {1900 + new Date().getYear()}{" "}
-          <a href="http://www.exception34.com" className={anchor}>
+          <a href="http://www.gitlab.exception34.com" className={anchor}>
             {"Exception34"}
           </a>
         </p>

@@ -39,7 +39,7 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
-    const ws = new Sockette("wss://exception34.com/node-red/control", {
+    const ws = new Sockette("wss://gitlab.exception34.com/node-red/control", {
     //const ws = new Sockette("ws://localhost:1880/control", {
       timeout: 10e3,
       //maxAttempts: 100,

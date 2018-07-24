@@ -100,8 +100,8 @@ class CameraPage extends React.Component {
         url: "rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov",
         location: ""
       });
-     this.socket = new WebSocket("wss://exception34.com/node-red/feed_out");
-    //this.socket = new WebSocket("wss://exception34.com/node-red/feed_out");
+     this.socket = new WebSocket("wss://gitlab.exception34.com/node-red/feed_out");
+    //this.socket = new WebSocket("wss://gitlab.exception34.com/node-red/feed_out");
     //this.socket = new WebSocket("ws://localhost:1880/feed_out");
   }
 
@@ -463,7 +463,7 @@ class CameraPage extends React.Component {
     );
 
     let localFeed =
-      "https://exception34.com:" + this.state.camera.port + "/feed";
+      "https://gitlab.exception34.com:" + this.state.camera.port + "/feed";
       //"http://localhost:" + this.state.camera.port + "/feed";
 
     imageFeed = <img alt="feed is offline" src={localFeed} />;
